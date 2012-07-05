@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.cismet</groupId>
+        <artifactId>global-parent</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>de.cismet</groupId>
+    <artifactId>cismet-parent</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>cismet parent POM</name>
+    <description>Parent POM of the cismet GmbH that shall be used for all cismet developement</description>
+    <url>http://www.cismet.de</url>
+    <organization>
+        <name>cismet GmbH</name>
+        <url>http://www.cismet.de</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GNU Lesser Public License</name>
+            <distribution>repo</distribution>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>mscholl</id>
+            <name>Martin Scholl</name>
+            <email>martin.scholl@cismet.de</email>
+            <organization>cismet GmbH</organization>
+        </developer>
+    </developers>
+
+    <prerequisites>
+        <maven>3</maven>
+    </prerequisites>
+
+    <scm>
+        <connection>https://github.com/cismet/cismet-parent.git</connection>
+        <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
+        <url>https://github.com/cismet/cismet-parent</url>
+    </scm>
+    <issueManagement>
+        <system>Mantis</system>
+        <url>http://bugs.cismet.de</url>
+    </issueManagement>
+    <ciManagement>
+        <system>jenkins</system>
+        <url>https://ci.cismet.de</url>
+    </ciManagement>
+    <distributionManagement>
+        <repository>
+            <id>cismet-repo</id>
+            <name>cismet-libs-releases-local</name>
+            <url>https://repo.cismet.de/cismet-libs-releases-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>cismet-repo</id>
+            <name>cismet-libs-snapshots-local</name>
+            <url>https://repo.cismet.de/cismet-libs-snapshots-local</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>cismet-dev</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>sign</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <keystore>${de.cismet.keystore.path}</keystore>
+                            <alias>cismet</alias>
+                            <storepass>${de.cismet.keystore.pass}</storepass>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>triemax</groupId>
+                        <artifactId>jalopy-maven</artifactId>
+                        <version>1.9.4-122</version>
+                        <executions>
+                            <execution>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>format</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <convention>http://192.168.100.6:80/cismet_jalopy_v2.xml</convention>
+                            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+                            <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                            <repository>false</repository>
+                            <compile>true</compile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
