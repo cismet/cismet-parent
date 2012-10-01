@@ -139,7 +139,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <convention>http://192.168.100.6:80/cismet_jalopy_v2.xml</convention>
+                            <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
                             <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
                             <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
                             <repository>false</repository>
