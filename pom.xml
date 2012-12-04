@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>global-parent</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0</version>
     </parent>
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -139,7 +139,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <convention>http://192.168.100.6:80/cismet_jalopy_v2.xml</convention>
+                            <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
                             <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
                             <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
                             <repository>false</repository>
