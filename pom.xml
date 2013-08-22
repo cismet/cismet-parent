@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>global-parent</artifactId>
-        <version>2.0</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -47,8 +47,8 @@
         <url>https://github.com/cismet/cismet-parent</url>
     </scm>
     <issueManagement>
-        <system>Mantis</system>
-        <url>http://bugs.cismet.de</url>
+        <system>GitHub</system>
+        <url>https://github.com/cismet/cismet-parent/issues</url>
     </issueManagement>
     <ciManagement>
         <system>jenkins</system>
@@ -99,6 +99,51 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+    
+    <build>
+        <plugins>
+            
+            <!-- START: direct classpath configuration -->
+            <plugin>
+                <groupId>de.cismet.cids</groupId>
+                <artifactId>cids-maven-plugin</artifactId>
+                <version>2.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>create-compile-classpath</id>
+                        <goals>
+                            <goal>create-direct-cp-property</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- version managed by global-parent -->
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>direct-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerArguments>
+                                <sourcepath>${basedir}/src/main/java</sourcepath>
+                                <classpath>${classpath.directDependencies}</classpath>
+                            </compilerArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- END: direct classpath configuration -->
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
