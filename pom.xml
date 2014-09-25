@@ -10,7 +10,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.0</version>
+    <version>3.0.1</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -136,6 +136,7 @@
                             <compilerArguments>
                                 <sourcepath>${basedir}/src/main/java</sourcepath>
                                 <classpath>${classpath.directDependencies}</classpath>
+                                <processorpath>%classpath</processorpath>
                             </compilerArguments>
                         </configuration>
                     </execution>
