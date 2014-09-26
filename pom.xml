@@ -119,6 +119,27 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>create-processor-classpath</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <exportAntProperties>true</exportAntProperties>
+                            <target>
+                                <property name="classpath.processorDependencies" refid="maven.compile.classpath"/>
+                                <echo>Created processor classpath property: $${classpath.processorDependencies}</echo>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <!-- version managed by global-parent -->
                 <executions>
@@ -136,7 +157,7 @@
                             <compilerArguments>
                                 <sourcepath>${basedir}/src/main/java</sourcepath>
                                 <classpath>${classpath.directDependencies}</classpath>
-                                <processorpath>%classpath</processorpath>
+                                <processorpath>${classpath.processorDependencies}</processorpath>
                             </compilerArguments>
                         </configuration>
                     </execution>
