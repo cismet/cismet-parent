@@ -131,7 +131,7 @@
                         <configuration>
                             <exportAntProperties>true</exportAntProperties>
                             <target>
-                                <property name="classpath.processorDependencies" refid="maven.compile.classpath"/>
+                                <property name="classpath.processorDependencies" refid="maven.compile.classpath" />
                                 <echo>Created processor classpath property: $${classpath.processorDependencies}</echo>
                             </target>
                         </configuration>
