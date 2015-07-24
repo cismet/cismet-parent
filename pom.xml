@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.cismet</groupId>
         <artifactId>global-parent</artifactId>
-        <version>3.0</version>
+        <version>3.0.1</version>
     </parent>
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <version>3.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -45,7 +45,8 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/cismet/cismet-parent/issues</url>
