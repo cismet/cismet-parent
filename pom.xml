@@ -196,7 +196,7 @@
                     <plugin>
                         <groupId>triemax</groupId>
                         <artifactId>jalopy-maven</artifactId>
-                        <version>1.9.4-126</version>
+                        <version>1.9.5-401</version>
                         <executions>
                             <execution>
                                 <phase>process-sources</phase>
