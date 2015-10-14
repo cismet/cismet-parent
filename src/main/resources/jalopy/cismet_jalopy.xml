@@ -11,7 +11,7 @@
   <java>
    <general>
     <compliance>
-     <version>16</version>
+     <version>18</version>
     </compliance>
    </general>
    <printer>
