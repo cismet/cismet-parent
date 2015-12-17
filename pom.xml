@@ -45,8 +45,8 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement>
         <system>Mantis</system>
         <url>http://bugs.cismet.de</url>
@@ -134,6 +134,7 @@
                             <keystore>${de.cismet.keystore.path}</keystore>
                             <alias>cismet</alias>
                             <storepass>${de.cismet.keystore.pass}</storepass>
+                            <tsa>https://timestamp.geotrust.com/tsa</tsa>
                         </configuration>
                     </plugin>
                     <plugin>
