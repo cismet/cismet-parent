@@ -10,7 +10,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.1</version>
+    <version>3.2</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -45,7 +45,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-      <tag>v3.1</tag>
+      <tag>v3.2</tag>
   </scm>
     <issueManagement>
         <system>GitHub</system>
@@ -179,7 +179,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
-                        <version>1.2</version>
+                        <version>1.4</version>
                         <executions>
                             <execution>
                                 <id>sign</id>
@@ -192,6 +192,7 @@
                             <keystore>${de.cismet.keystore.path}</keystore>
                             <alias>cismet</alias>
                             <storepass>${de.cismet.keystore.pass}</storepass>
+			    <tsa>https://timestamp.geotrust.com/tsa</tsa>
                         </configuration>
                     </plugin>
                     <plugin>
