@@ -10,7 +10,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.2</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -45,7 +45,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-      <tag>HEAD</tag>
+      <tag>v3.2</tag>
   </scm>
     <issueManagement>
         <system>GitHub</system>
