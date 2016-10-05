@@ -10,7 +10,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.2</version>
+    <version>3.3</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -45,7 +45,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-      <tag>v3.2</tag>
+      <tag>v3.3</tag>
   </scm>
     <issueManagement>
         <system>GitHub</system>
@@ -192,7 +192,7 @@
                             <keystore>${de.cismet.keystore.path}</keystore>
                             <alias>cismet</alias>
                             <storepass>${de.cismet.keystore.pass}</storepass>
-			    <tsa>https://timestamp.geotrust.com/tsa</tsa>
+			    <tsa>${de.cismet.signing.tsa.server}</tsa>
                         </configuration>
                     </plugin>
                     <plugin>
