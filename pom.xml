@@ -192,7 +192,7 @@
                             <keystore>${de.cismet.keystore.path}</keystore>
                             <alias>cismet</alias>
                             <storepass>${de.cismet.keystore.pass}</storepass>
-			    <tsa>https://timestamp.geotrust.com/tsa</tsa>
+			    <tsa>${de.cismet.signing.tsa.server}</tsa>
                         </configuration>
                     </plugin>
                     <plugin>
