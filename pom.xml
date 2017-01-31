@@ -215,12 +215,14 @@
                                         <version>[${java.version},)</version>
                                     </requireJavaVersion>
                                     <!-- 
-                                        Enforce Minimal supported Maven (e.g. 3.3.1) 
+                                        Enforce Minimal supported Maven (e.g. 3.3.9) 
                                     -->
                                     <requireMavenVersion>
                                         <version>[${maven.version},)</version>
                                     </requireMavenVersion>
-                                </rules>    
+                                </rules>
+                                <fail>false</fail>
+                                <skip>false</skip>    
                             </configuration>
                         </execution>
                     
@@ -235,7 +237,7 @@
                             <configuration>
                                 <rules>
                                     <requireActiveProfile>
-                                        <profiles>cismet-dev</profiles>
+                                        <profiles>cismet-inhouse-dev</profiles>
                                     </requireActiveProfile>
                                 </rules>
                                 <fail>false</fail>
@@ -260,10 +262,12 @@
                                         <includes>src/main/java/**,src/main/resources/**,src/test/java/**,src/test/resources/**</includes>
                                     </requireEncoding>
                                 </rules>
+                                <useDefaultExcludes>true</useDefaultExcludes>
+                                
                                 <!-- fail=false -> rule temporarily disabled for testing purposes -->
                                 <fail>false</fail>
                                 <fastFail>false</fastFail>
-                                <useDefaultExcludes>true</useDefaultExcludes>
+                                <skip>false</skip>
                             </configuration>
                         </execution>
                     
@@ -292,7 +296,8 @@
                                         <message>Test dependencies should be in test scope!</message>
                                     </bannedDependencies>
                                 </rules>
-                                <fail>true</fail>
+                                <fail>false</fail>
+                                <skip>false</skip>
                             </configuration>
                         </execution>
                         <!-- 
@@ -337,7 +342,8 @@
                                         <searchTransitive>true</searchTransitive>
                                     </bannedDependencies>
                                 </rules>
-                                <fail>true</fail>
+                                <fail>false</fail>
+                                <skip>false</skip>
                             </configuration>
                         </execution>
                     
@@ -356,7 +362,8 @@
                                         <uniqueVersions>true</uniqueVersions>
                                     </requireUpperBoundDeps>
                                 </rules>
-                                <fail>true</fail>       
+                                <fail>false</fail>
+                                <skip>false</skip>       
                             </configuration>
                         </execution>
                         <!--
@@ -378,7 +385,8 @@
                                     </dependencyConvergence>
                                 </rules>
                                 <!-- fail=false -> rule temporarily disabled for testing purposes -->
-                                <fail>false</fail>         
+                                <fail>false</fail>
+                                <skip>true</skip>               
                             </configuration>            
                         </execution>
                     
@@ -396,7 +404,8 @@
                                 <rules>
                                     <banCircularDependencies />
                                 </rules>
-                                <fail>false</fail>
+                                <fail>true</fail>
+                                <skip>false</skip>  
                             </configuration>
                         </execution>
                         <!--
@@ -430,6 +439,7 @@
                                     </banDuplicateClasses>
                                 </rules>
                                 <fail>false</fail>
+                                <skip>false</skip>  
                             </configuration>
                         </execution>
                         <!--
@@ -474,8 +484,26 @@
                 </plugin>
                 
                 <!--
+                    maven-antrun-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                
+                <!--
+                    maven-help-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                
+                <!--
                     jalopy-maven: Code formsatting plugin
-                    Configuration in profile cismet-dev!
+                    Configuration in profile cismet-inhouse-dev!
                 -->
                 <plugin>
                     <groupId>triemax</groupId>
@@ -489,13 +517,6 @@
                             </goals>
                         </execution>
                     </executions>
-                    <configuration>
-                        <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
-                        <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-                        <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                        <repository>false</repository>
-                        <compile>true</compile>
-                    </configuration>
                 </plugin>
 
             
@@ -569,7 +590,7 @@
                 </plugin>
                 
                 <!--
-                    maven-jarsigner-plugin: Configuration in profile cismet-dev!
+                    maven-jarsigner-plugin: Configuration in profile cismet-inhouse-dev and cismet-release!
                 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -588,12 +609,6 @@
                             </goals>
                         </execution>
                     </executions>
-                    <configuration>
-                        <keystore>${de.cismet.keystore.path}</keystore>
-                        <alias>cismet</alias>
-                        <storepass>${de.cismet.keystore.pass}</storepass>
-                        <tsa>${de.cismet.signing.tsa.server}</tsa>
-                    </configuration>
                 </plugin>
                 
                 <!--
@@ -621,7 +636,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>2.10.4</version>
                     <!-- 
-                        required for Java 1.8 (disabled for Java 1.7)
+                       Configuration in profile javadoc-java-1.8!
                     -->
                     <!--<configuration>
                         <additionalparam>-Xdoclint:none</additionalparam>
@@ -663,6 +678,7 @@
                     maven-site-plugin
                 -->
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.6</version>
                     <dependencies>
@@ -682,6 +698,15 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.3</version>
                 </plugin>
+                
+                <!--
+                    exec-maven-plugin plugin used in conjunction with cids-exec profile and NetBeans nbactions.xml
+                -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.5.0</version>
+                </plugin>
 
                 <!-- 
                     Build plugins will be executed during the build and then, they should be configured in the <build/> element.     
@@ -690,9 +715,28 @@
         </pluginManagement>
         
         <!-- 
-            actual selection / activation of build plugins goes into in child poms or profiles
+            This section defines the plugins that are activated during buld lifecycle for all child projects!
+            The selection can be extended by the profiles cismet-inhouse-dev, cismet-release and cids-copy-libs -> activeProfiles in settings.xml
         -->
-        <plugins/>  
+        <plugins>  
+            <!-- Activate Plugin the enforce several dependency rules -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            
+            <!-- Activate tests for all child projects -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            
+            <!-- Activate Plugin to enfore declaration of transtive dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
     
     <!--
@@ -702,42 +746,30 @@
     
     <profiles>
         <!--
-            cismet development profile for code formatting and artifact signing
-            should be activated by default in settings.xml during development!
+            cismet inhouse development profile activates code formatting and artifact signing
+            This profile should be activated by default in settings.xml during development!
+            
+            This profile depends on the following properties (to be configured in settings.xml)
+            - de.cismet.keystore.path
+            - de.cismet.keystore.pass
+            - de.cismet.signing.tsa.server
         -->
         <profile>
-            <id>cismet-dev</id>
+            <id>cismet-inhouse-dev</id>
             
             <activation>
+                <!-- activate in settings.xml -->
                 <activeByDefault>false</activeByDefault>
             </activation>
             
+            <!--
             <properties>
-                <!-- used in cismet-parent -->
-                <!--<de.cismet.keystore.path></de.cismet.keystore.path>-->
-                
-                <!-- used in cismet-parent -->
-                <!--<de.cismet.keystore.pass>Tov6uPDlMLi2CKBNpbcywqmpzbgjgQqJfPNbAOPnUECFqGWADG</de.cismet.keystore.pass> -->
-
-                <!-- used in cids-parent -->
-                <!--<de.cismet.cidsDistDir></de.cismet.cidsDistDir> -->
-                
-                <!-- path to the navigator workdir in use, used to run the navigator from NB -->
-                <!--<de.cismet.cids.navigator.workingDir></de.cismet.cids.navigator.workingDir>-->
-                
-                <!-- path to the server workdir in use, used to run the server from NB -->
-                <!--<de.cismet.cids.server.workingDir>${de.cismet.cidsDistDir}/server/switchon</de.cismet.cids.server.workingDir>-->
-                
-                <!-- path to the local folder in use, required by the cids maven plugin -->
-                <!--<de.cismet.cids.lib.local>${de.cismet.cidsDistDir}/lib/localSwitchon</de.cismet.cids.lib.local>-->
-                
-                <!-- disable JavaDoc Warnmings in Java 1.8 -->
-                <!--<additionalparam>-Xdoclint:none</additionalparam> -->
-                
-                <!-- new tsa server configuration -->
-                <de.cismet.signing.tsa.server>http://sha256timestamp.ws.symantec.com/sha256/timestamp</de.cismet.signing.tsa.server>
+                <de.cismet.keystore.path></de.cismet.keystore.path>
+                <de.cismet.keystore.pass></de.cismet.keystore.pass>
+                <de.cismet.signing.tsa.server>http://dse200.ncipher.com/TSS/HttpTspServer</de.cismet.signing.tsa.server>
             </properties>
-            
+            -->
+
             <build>
                 <plugins>
                     <!--
@@ -746,20 +778,64 @@
                     <plugin>
                         <groupId>triemax</groupId>
                         <artifactId>jalopy-maven</artifactId>
+                        <configuration>
+                            <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
+                            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+                            <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                            <repository>false</repository>
+                            <compile>true</compile>
+                        </configuration>
                     </plugin>
-                    
-                    <!-- execute tests -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                    </plugin>
-                        
+       
                     <!--
                         sign artifacts with cismet key
                     -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
+                        <configuration>
+                            <keystore>${de.cismet.keystore.path}</keystore>
+                            <alias>cismet</alias>
+                            <storepass>${de.cismet.keystore.pass}</storepass>
+                            <tsa>${de.cismet.signing.tsa.server}</tsa>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!--
+            cismet release profile activates plugins artifact signing and creation of -src and -javadoc.jar
+            in addition to default plugins activated in cismet-parent
+            This profile should NOT be activated by default in settings.xml during development!
+            
+            This profile depends on the following properties (to be configured in settings.xml)
+            - de.cismet.keystore.path
+            - de.cismet.keystore.pass
+            - de.cismet.signing.tsa.server
+        -->
+        <profile>
+            <id>cismet-release</id>
+            
+            <activation>
+                <!-- activate in settings.xml of jenkins-->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>     
+                    <!--
+                        sign artifacts with cismet key
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <configuration>
+                            <keystore>${de.cismet.keystore.path}</keystore>
+                            <alias>cismet</alias>
+                            <storepass>${de.cismet.keystore.pass}</storepass>
+                            <tsa>${de.cismet.signing.tsa.server}</tsa>
+                        </configuration>
                     </plugin>
                     
                     <!-- attach sources -->
@@ -776,23 +852,10 @@
                 </plugins>
             </build>
         </profile>
-        
-        <!--
-            cismet development profile for code formatting and artifact signing
-            should be activated by default in settings.xml during development!
-        -->
-        <profile>
-            <id>cids-dev</id>
-            <activation>
-                <property>
-                    <name>de.cismet.cidsDistDir</name>
-                </property>
-            </activation>
-        </profile>
-        
+
         <!--
             Profile to automatically configure the maven-javadoc-plugin for
-            Java 1.8 and 1.7 comptibility
+            Java 1.8 and 1.7 compatibility
         -->                
         <profile>
             <id>javadoc-java-1.8</id>
@@ -802,7 +865,7 @@
             </activation>
             <build>
                 <!--
-                    Configure in pluginManagement Section: Don't activate the 
+                    Configure in pluginManagement Section only: Don't activate the 
                     plugin during the build by default!
                 -->
                 <pluginManagement>
@@ -813,7 +876,6 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.10.4</version>
                             <!-- 
                                 required for Java 1.8 (disabled for Java 1.7)
                             -->
