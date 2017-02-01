@@ -929,5 +929,28 @@
                 </pluginManagement>
             </build>
         </profile>
+        
+        <!-- 
+            skip-jalopy for easily skipping jalopy code formatting plugin, e.g.
+            to preserve original code format in forked projects to allow push request / rebasing
+            set activeByDefault to true on pom level
+        -->
+        <profile>
+            <id>skip-jalopy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>triemax</groupId>
+                        <artifactId>jalopy-maven</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
