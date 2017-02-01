@@ -938,18 +938,23 @@
         <profile>
             <id>skip-jalopy</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>triemax</groupId>
-                        <artifactId>jalopy-maven</artifactId>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
+                <!--
+                    IMPORTANT: Configure in plugin management
+                -->
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>triemax</groupId>
+                            <artifactId>jalopy-maven</artifactId>
+                            <configuration>
+                                <skip>true</skip>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
