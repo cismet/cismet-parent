@@ -940,22 +940,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
-            <build>
-                <!--
-                    IMPORTANT: Configure in plugin management
-                -->
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>triemax</groupId>
-                            <artifactId>jalopy-maven</artifactId>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
+            <properties>
+                <jalopy.skip>true</jalopy.skip>
+            </properties>
         </profile>
     </profiles>
 </project>
