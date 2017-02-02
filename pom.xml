@@ -895,6 +895,40 @@
                 </plugins>
             </build>
         </profile>
+        
+        
+        <!-- 
+            The javafx-java-1.7 build profile can be activated in projects
+            that use javafx *and* need to be build on Java 1.7.
+            The location of jfxrt.jar in Oracle Java 7 <JRE_HOME>/lib/jfxrt.jar
+            The location of jfxrt.jar in Oracle Java 8 is <JRE_HOME>/lib/ext/jfxrt.jar
+            - extend the profile in pom of respective projects that uses javafx
+            - set activiation property <jdk>(,1.7]</jdk>
+        -->
+        <profile>
+            <id>javafx-java-1.7</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <!--<jdk>(,1.7]</jdk>-->
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>jfxrt</artifactId>
+                        <version>${java.version}</version>
+                        <scope>system</scope>
+                        <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement> 
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <!--
             Profile to automatically configure the maven-javadoc-plugin for
@@ -904,7 +938,7 @@
             <id>javadoc-java-1.8</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
-                <jdk>1.8</jdk>
+                <jdk>[1.8,)</jdk>
             </activation>
             <build>
                 <!--
@@ -925,14 +959,6 @@
                             <configuration>
                                 <additionalparam>-Xdoclint:none</additionalparam>
                             </configuration>
-                            <executions>
-                                <execution>
-                                    <id>attach-javadocs</id>
-                                    <goals>
-                                        <goal>jar</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
