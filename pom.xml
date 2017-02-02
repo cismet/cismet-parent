@@ -256,7 +256,11 @@
                                     </requireMavenVersion>
                                 </rules>
                                 <fail>false</fail>
-                                <skip>false</skip>    
+                                <!-- 
+                                    default value for skip if not specified is false. Don't set to false
+                                    explicitely, or netbeans-fastbuild profiles won't work!
+                                --> 
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                     
@@ -301,7 +305,7 @@
                                 <!-- fail=false -> rule temporarily disabled for testing purposes -->
                                 <fail>false</fail>
                                 <fastFail>false</fastFail>
-                                <skip>false</skip>
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                     
@@ -331,7 +335,7 @@
                                     </bannedDependencies>
                                 </rules>
                                 <fail>false</fail>
-                                <skip>false</skip>
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                         <!-- 
@@ -377,7 +381,7 @@
                                     </bannedDependencies>
                                 </rules>
                                 <fail>false</fail>
-                                <skip>false</skip>
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                     
@@ -397,7 +401,7 @@
                                     </requireUpperBoundDeps>
                                 </rules>
                                 <fail>false</fail>
-                                <skip>false</skip>       
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                         <!--
@@ -439,7 +443,7 @@
                                     <banCircularDependencies />
                                 </rules>
                                 <fail>true</fail>
-                                <skip>false</skip>  
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                         <!--
@@ -473,7 +477,7 @@
                                     </banDuplicateClasses>
                                 </rules>
                                 <fail>false</fail>
-                                <skip>false</skip>  
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                         <!--
@@ -496,6 +500,7 @@
                                     </enforceBytecodeVersion>
                                 </rules>
                                 <fail>false</fail>
+                                <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
                     </executions>
@@ -855,6 +860,10 @@
                 <!-- activate in settings.xml of jenkins-->
                 <activeByDefault>false</activeByDefault>
             </activation>
+            
+            <properties>
+                <jalopy.skip>true</jalopy.skip>
+            </properties>
 
             <build>
                 <plugins>     
@@ -942,6 +951,52 @@
             </activation>
             <properties>
                 <jalopy.skip>true</jalopy.skip>
+            </properties>
+        </profile>
+        
+        <!--
+            netbeans-fastbuild is a profile that can be activated in nbactions.xml for 
+            certain build actions (e.g. build, run) to speed up the build process
+            during development. It skips all tasks related to dependecy management 
+            code formatting and testing.
+            
+            NOTE: this profile *must not* be activated for the 'clean and build' action!
+            'clean and build' *must* be executed before comitting changes to the SCM!
+        -->
+        <profile>
+            <id>netbeans-fastbuild</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <mdep.skip>true</mdep.skip>
+                <mdep.analyze.skip>true</mdep.analyze.skip>
+                <enforcer.skip>true</enforcer.skip>
+                <jalopy.skip>true</jalopy.skip>
+                <maven.test.skip>true</maven.test.skip>
+                <jarsigner.skip>true</jarsigner.skip>
+            </properties>
+        </profile>
+        
+        <!--
+            netbeans-fastbuild-test is a profile that can be activated in nbactions.xml for 
+            certain test build actions (e.g. test, debug-test, ...) to speed up the build process
+            during testing. It skips all tasks related to dependecy management and code formatting.
+            
+            NOTE: this profile *must not* be activated for the 'clean and build' action!
+            'clean and build' *must* be executed before comitting changes to the SCM!
+        -->
+        <profile>
+            <id>netbeans-fastbuild-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <mdep.skip>true</mdep.skip>
+                <mdep.analyze.skip>true</mdep.analyze.skip>
+                <enforcer.skip>true</enforcer.skip>
+                <jalopy.skip>true</jalopy.skip>
+                <jarsigner.skip>true</jarsigner.skip>
             </properties>
         </profile>
     </profiles>
