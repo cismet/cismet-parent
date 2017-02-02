@@ -541,7 +541,7 @@
                 </plugin>
                 
                 <!--
-                    jalopy-maven: Code formsatting plugin
+                    jalopy-maven: Code formatting plugin
                     Configuration in profile cismet-inhouse-dev!
                 -->
                 <plugin>
@@ -964,22 +964,7 @@
                 </pluginManagement>
             </build>
         </profile>
-        
-        <!-- 
-            skip-jalopy for easily skipping jalopy code formatting plugin, e.g.
-            to preserve original code format in forked projects to allow push request / rebasing
-            set activeByDefault to true on pom level
-        -->
-        <profile>
-            <id>skip-jalopy</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <jalopy.skip>true</jalopy.skip>
-            </properties>
-        </profile>
-        
+                
         <!--
             netbeans-fastbuild is a profile that can be activated in nbactions.xml for 
             certain build actions (e.g. build, run) to speed up the build process
