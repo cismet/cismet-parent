@@ -18,6 +18,7 @@
         <maven.version>3.3.3</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     
     <inceptionYear>2012</inceptionYear>
@@ -214,7 +215,7 @@
                                     -->
                                     <ignoredUnusedDeclaredDependency>junit:junit</ignoredUnusedDeclaredDependency>
                                     <!-- 
-                                        jcl-over-slf4j logging bridge is needed to avoid commons-logging compatilbity problems 
+                                        jcl-over-slf4j logging bridge is needed to avoid commons-logging compatibility problems 
                                     -->
                                     <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
                                     <!--<ignoredUsedUndeclaredDependencies/>-->
@@ -340,10 +341,11 @@
                         </execution>
                         <!-- 
                             This rule checks the dependencies and fails if any 
-                            of the matching excluded conflicting logging frameworks, bindings and bridges are found.
+                            of the matching excluded conflicting dependencies 
+                            (e.g. XML APIs, logging frameworks, bindings and bridges) are found.
                         -->
                         <execution>
-                            <id>sanitize-logging-frameworks</id>
+                            <id>sanitize-conflicting-dependencies</id>
                             <phase>validate</phase>
                             <goals>
                                 <goal>enforce</goal>
@@ -376,11 +378,18 @@
                                                 find occurences with 'mvn dependency:tree -Dincludes=*commons-logging*'
                                             -->
                                             <exclude>commons-logging:commons-logging:*:*</exclude>
+                                            <!--
+                                                Exclude any Xerces compile-time and runtime dependencies!
+                                            -->
+                                            <exclude>*:xerces:*:*:compile</exclude>
+                                            <exclude>*:xml-apis:*:*:compile</exclude>
+                                            <exclude>*:xerces:*:*:runtime</exclude>
+                                            <exclude>*:xml-apis:*:*:runtime</exclude>
                                         </excludes>
                                         <searchTransitive>true</searchTransitive>
                                     </bannedDependencies>
                                 </rules>
-                                <fail>false</fail>
+                                <fail>true</fail>
                                 <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
@@ -565,7 +574,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>3.6.1</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -593,7 +602,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.0.2</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
@@ -661,7 +670,7 @@
                         <execution>
                             <id>attach-sources</id>
                             <goals>
-                                <goal>jar</goal>
+                                <goal>jar-no-fork</goal>
                             </goals>
                         </execution>
                     </executions>
