@@ -381,10 +381,20 @@
                                             <!--
                                                 Exclude any Xerces compile-time and runtime dependencies!
                                             -->
-                                            <exclude>*:xerces:*:*:compile</exclude>
+                                            <!--<exclude>*:xerces:*:*:compile</exclude>
                                             <exclude>*:xml-apis:*:*:compile</exclude>
                                             <exclude>*:xerces:*:*:runtime</exclude>
-                                            <exclude>*:xml-apis:*:*:runtime</exclude>
+                                            <exclude>*:xml-apis:*:*:runtime</exclude>-->
+                                            <exclude>*:xmlParserAPIs:*:*:*</exclude>
+                                            <!--
+                                                Exclude org.jdom:jdom: To be replaced by
+                                                org.jdom:jdom-legacy!
+                                            -->
+                                            <exclude>org.jdom:jdom:*:*</exclude>
+                                            <!--
+                                                Exclude any forked dependencies!
+                                            -->
+                                            <exclude>org.jdesktop:beansbinding:*:*</exclude>
                                         </excludes>
                                         <searchTransitive>true</searchTransitive>
                                     </bannedDependencies>
