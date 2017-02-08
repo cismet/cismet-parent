@@ -113,41 +113,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    
-    <!--
-        FIXME: Replace inline dependencyManagement section by external BOM!
-    -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- TEST dependencies from global-parent v2 -->
-            <dependency>
-                <groupId>org.apache.maven.surefire</groupId>
-                <artifactId>surefire-junit4</artifactId>
-                <version>2.19.1</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- TEST dependencies from global-parent v3 -->
-            <!--<dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <scope>test</scope>
-            </dependency>-->
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>6.10</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    
+        
     <build>
         <!--
             plugin configuration
@@ -218,6 +184,10 @@
                                         jcl-over-slf4j logging bridge is needed to avoid commons-logging compatibility problems 
                                     -->
                                     <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
+                                    <!--
+                                        woodstox ASL vs LGPL mess!
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.codehaus.woodstox:woodstox-core-asl</ignoredUnusedDeclaredDependency>
                                     <!--<ignoredUsedUndeclaredDependencies/>-->
                                 </ignoredUnusedDeclaredDependencies>
                             </configuration>
@@ -386,12 +356,25 @@
                                             <exclude>*:xerces:*:*:runtime</exclude>
                                             <exclude>*:xml-apis:*:*:runtime</exclude>-->
                                             <exclude>xerces:xml-apis:*:*:*</exclude>
-                                            <exclude>*:xmlParserAPIs:*:*:*</exclude>
+                                            <exclude>*:xmlParserAPIs:*:*</exclude>
+                                            <!--
+                                                don't enforce the exclusion of STAX API
+                                                check duplicate classes instead!
+                                            -->
+                                            <!--<exclude>*:stax-api:*:*</exclude>-->
                                             <!--
                                                 Exclude org.jdom:jdom: To be replaced by
                                                 org.jdom:jdom-legacy!
                                             -->
                                             <exclude>org.jdom:jdom:*:*</exclude>
+                                            
+                                            <!--
+                                                Woodstox dependency changed Maven coordinates (org.codehaus.woodstox:wstx-asl changed to org.codehaus.woodstox:woodstox-core-asl).
+                                                See https://github.com/FasterXML/jackson-dataformat-xml/issues/132#issuecomment-69956175
+                                            -->
+                                            <exclude>org.codehaus.woodstox:wstx-asl:*:*</exclude>
+                                            <exclude>org.codehaus.woodstox:wstx-lgpl:*:*</exclude>
+                                            <exclude>org.codehaus.woodstox:woodstox-core-lgpl</exclude>
                                             <!--
                                                 Exclude any forked dependencies!
                                             -->
@@ -634,6 +617,7 @@
                     <!--<configuration combine.self="override"/>-->
                     <configuration>
                         <archive>
+                            <compress/>
                             <manifest>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
@@ -979,7 +963,21 @@
             </properties>
 
             <build>
-                <plugins>     
+                <plugins>    
+                    <!--
+                        create test-jar for use in upstream projects
+                    --> 
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>test-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!--
                         sign artifacts with cismet key
                     -->
