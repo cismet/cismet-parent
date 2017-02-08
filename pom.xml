@@ -15,7 +15,7 @@
         <java.version>1.7</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.version>3.3.3</maven.version>
+        <maven.version>3.3.9</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -160,7 +160,7 @@
                 <plugin>
                     <groupId>de.cismet.cids</groupId>
                     <artifactId>cids-maven-plugin</artifactId>
-                    <version>4.0</version>
+                    <version>5.0-SNAPSHOT</version>
                 </plugin>
                 
                 <!-- 
@@ -385,6 +385,7 @@
                                             <exclude>*:xml-apis:*:*:compile</exclude>
                                             <exclude>*:xerces:*:*:runtime</exclude>
                                             <exclude>*:xml-apis:*:*:runtime</exclude>-->
+                                            <exclude>xerces:xml-apis:*:*:*</exclude>
                                             <exclude>*:xmlParserAPIs:*:*:*</exclude>
                                             <!--
                                                 Exclude org.jdom:jdom: To be replaced by
@@ -857,6 +858,99 @@
                             <storepass>${de.cismet.keystore.pass}</storepass>
                             <tsa>${de.cismet.signing.tsa.server}</tsa>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!-- 
+            cismet-legacy-dev uses the cids-maven-plugin to enfore declaration of
+            implicit transitive dependencies *during compilation*. The profile is deactivated
+            by default for all builds! It can be activated temporarily to track down
+            dependency problems raised by the maven-dependency plugin (which is executed 
+            *after compilation*).
+        -->
+        <profile>
+            <id>cismet-legacy-dev</id>
+            
+            <activation>
+                <!-- activate temporarily in NetBeans for current project -->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+                        
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!-- START: direct classpath configuration -->
+                        <plugin>
+                            <groupId>de.cismet.cids</groupId>
+                            <artifactId>cids-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-compile-classpath</id>
+                                    <goals>
+                                        <goal>create-direct-cp-property</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-antrun-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-processor-classpath</id>
+                                    <phase>initialize</phase>
+                                    <goals>
+                                        <goal>run</goal>
+                                    </goals>
+                                    <configuration>
+                                        <exportAntProperties>true</exportAntProperties>
+                                        <target>
+                                            <property name="classpath.processorDependencies" refid="maven.compile.classpath" />
+                                            <echo>>>>>>>>>>>>>> Created processor classpath property: ${line.separator}${classpath.processorDependencies}${line.separator}</echo>
+                                            <echo>>>>>>>>>>>>>> Created direct dependencies classpath property: ${line.separator}${classpath.directDependencies}${line.separator}</echo>
+                                        </target>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <!-- version managed by global-parent -->
+                            <executions>
+                                <execution>
+                                    <id>default-compile</id>
+                                    <phase>none</phase>
+                                </execution>
+                                <execution>
+                                    <id>direct-compile</id>
+                                    <phase>compile</phase>
+                                    <goals>
+                                        <goal>compile</goal>
+                                    </goals>
+                                    <configuration>
+                                        <compilerArguments>
+                                            <sourcepath>${basedir}/src/main/java</sourcepath>
+                                            <classpath>${classpath.directDependencies}</classpath>
+                                            <processorpath>${classpath.processorDependencies}</processorpath>
+                                        </compilerArguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <!-- END: direct classpath configuration -->
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>de.cismet.cids</groupId>
+                        <artifactId>cids-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
