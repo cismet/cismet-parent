@@ -188,6 +188,10 @@
                                         woodstox ASL vs LGPL mess!
                                     -->
                                     <ignoredUnusedDeclaredDependency>org.codehaus.woodstox:woodstox-core-asl</ignoredUnusedDeclaredDependency>
+                                    <!--
+                                        Need to include managed javassist in favour of javassist mess excluded from degree!
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.javassist:javassist</ignoredUnusedDeclaredDependency>
                                     <!--<ignoredUsedUndeclaredDependencies/>-->
                                 </ignoredUnusedDeclaredDependencies>
                             </configuration>
@@ -374,7 +378,15 @@
                                             -->
                                             <exclude>org.codehaus.woodstox:wstx-asl:*:*</exclude>
                                             <exclude>org.codehaus.woodstox:wstx-lgpl:*:*</exclude>
-                                            <exclude>org.codehaus.woodstox:woodstox-core-lgpl</exclude>
+                                            <exclude>org.codehaus.woodstox:woodstox-core-lgpl:*:*</exclude>
+                                            
+                                            <!--
+                                                According maven group id naming convention group names should starts from domain name, 
+                                                so guys who develop javaassist changed group name in 3.13.0 release.
+                                                See https://issues.jboss.org/browse/JASSIST-96?_sscc=t
+                                            -->
+                                            <exclude>javassist:javassist:*:*</exclude>
+                                            
                                             <!--
                                                 Exclude any forked dependencies!
                                             -->
