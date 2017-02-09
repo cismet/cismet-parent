@@ -388,6 +388,11 @@
                                             <exclude>javassist:javassist:*:*</exclude>
                                             
                                             <!--
+                                                WARNING: org.postgis:postgis-stubs overrides org/postgresql/PGConnection.class of postgresql:postgresql with empty stub
+                                            -->
+                                            <exclude>org.postgis:postgis-stubs:*:*</exclude>
+                                            
+                                            <!--
                                                 Exclude any forked dependencies!
                                             -->
                                             <exclude>org.jdesktop:beansbinding:*:*</exclude>
