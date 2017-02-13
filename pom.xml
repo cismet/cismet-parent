@@ -605,6 +605,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.19.1</version>
+                    <configuration>
+                        <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+                    </configuration>
                 </plugin>
                 
                 <!--
@@ -1141,7 +1144,6 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <mdep.skip>true</mdep.skip>
                 <mdep.analyze.skip>true</mdep.analyze.skip>
                 <enforcer.skip>true</enforcer.skip>
                 <jalopy.skip>true</jalopy.skip>
