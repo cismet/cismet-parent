@@ -1113,6 +1113,7 @@
                 <enforcer.skip>true</enforcer.skip>
                 <jalopy.skip>true</jalopy.skip>
                 <maven.test.skip>true</maven.test.skip>
+                <maven.source.skip>true</maven.source.skip>
                 <jarsigner.skip>true</jarsigner.skip>
             </properties>
         </profile>
@@ -1135,6 +1136,7 @@
                 <mdep.analyze.skip>true</mdep.analyze.skip>
                 <enforcer.skip>true</enforcer.skip>
                 <jalopy.skip>true</jalopy.skip>
+                <maven.source.skip>true</maven.source.skip>
                 <jarsigner.skip>true</jarsigner.skip>
             </properties>
         </profile>
