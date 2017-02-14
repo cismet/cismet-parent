@@ -393,6 +393,12 @@
                                             <exclude>org.postgis:postgis-stubs:*:*</exclude>
                                             
                                             <!--
+                                                Obsolete SwingX Backport to Java 1.5
+                                                See https://en.wikipedia.org/wiki/SwingWorker
+                                            -->
+                                            <exclude>org.jdesktop:swingx:*:*</exclude>
+                                            
+                                            <!--
                                                 Exclude any forked dependencies!
                                             -->
                                             <exclude>org.jdesktop:beansbinding:*:*</exclude>
@@ -596,6 +602,13 @@
                             <sourcepath>${project.basedir}/src/main/java</sourcepath>
                         </compilerArguments>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-simple</artifactId>
+                            <version>1.7.22</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 
                 <!--
