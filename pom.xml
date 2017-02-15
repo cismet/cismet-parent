@@ -457,6 +457,26 @@
                                             -->
                                             <!-- <exclude>jfree:*:*:*</exclude> -->
                                             
+                                            
+                                            <!--
+                                                Java Advanced Imaging Chaos! See 
+                                                https://cismet.slack.com/files/pascal.dihe/F46EX6X7H/Java_Advanced_Imaging___Maven
+                                                http://stackoverflow.com/questions/1209583/using-java-advanced-imaging-with-maven
+                                            -->
+                                            <exclude>de.cismet.todo:jai_codec:*:*</exclude>
+                                            <exclude>de.cismet.todo:jai_core:*:*</exclude>
+                                            <exclude>javax.media:jai-codec:*:*</exclude>
+                                            <exclude>javax.media:jai_codec:*:*</exclude>
+                                            <exclude>javax.media.jai:jai-codec:*:*</exclude>
+                                            <exclude>javax.media.jai:jai_codec:*:*</exclude>
+                                            <exclude>javax.media:jai-core:*:*</exclude>
+                                            <exclude>javax.media:jai_core:*:*</exclude>
+                                            <exclude>javax.media.jai:jai-core:*:*</exclude>
+                                            <exclude>javax.media.jai:jai_core:*:*</exclude>
+                                            <exclude>javax.media:jai_imageio:*:*</exclude>
+                                            <exclude>com.sun.media:jai_imageio:*:*</exclude>
+                                            <exclude>com.sun.media:jai_codec:*:*</exclude>
+                                            
                                             <!--
                                                 Exclude any forked dependencies!
                                             -->
@@ -557,6 +577,8 @@
                                             <ignoreClass>org.apache.juli.*</ignoreClass>
                                             <ignoreClass>org.apache.commons.*</ignoreClass>
                                             <ignoreClass>org.aspectj.*</ignoreClass>
+                                            <ignoreClass>org.apache.xmlbeans.xml.stream.*</ignoreClass>
+                                            <ignoreClass>org.apache.geronimo.osgi.locator.*</ignoreClass>
                                         </ignoreClasses>
                                         <findAllDuplicates>true</findAllDuplicates>
                                     </banDuplicateClasses>
