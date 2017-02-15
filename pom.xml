@@ -120,6 +120,7 @@
         -->
         <pluginManagement>
             <plugins>
+                
                 <!--
                     cids-maven-plugin - build tools for cismet projects
                 -->
@@ -127,6 +128,58 @@
                     <groupId>de.cismet.cids</groupId>
                     <artifactId>cids-maven-plugin</artifactId>
                     <version>5.0-SNAPSHOT</version>
+                </plugin>
+
+                <!--
+                    maven-help-plugin - print the actives profiles for esier debugging
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>2.2</version>
+                    <executions>
+                        <execution>
+                            <id>print-active-profiles</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>active-profiles</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!--
+                    maven-antrun-plugin - print important properties for esier debugging
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                    <executions>
+                        <execution>
+                            <id>print-properties</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <echo>[de.cismet.cidsDistDir] ${de.cismet.cidsDistDir}</echo>
+                                    <echo>[de.cismet.libDir] ${de.cismet.libDir}</echo>
+                                    <echo>[de.cismet.cids.lib.local] ${de.cismet.cids.lib.local}</echo>
+                                    <echo>[de.cismet.cids.navigator.workingDir] ${de.cismet.cids.navigator.workingDir}</echo>
+                                    <echo>[de.cismet.cids.server.workingDir] ${de.cismet.cids.server.workingDir}</echo>
+                                    <echo>[mdep.skip] ${mdep.skip}</echo>
+                                    <echo>[mdep.analyze.skip] ${mdep.analyze.skip}</echo>
+                                    <echo>[enforcer.skip] ${enforcer.skip}</echo>
+                                    <echo>[jalopy.skip] ${jalopy.skip}</echo>
+                                    <echo>[maven.test.skip] ${maven.test.skip}</echo>
+                                    <echo>[maven.source.skip] ${maven.source.skip}</echo>
+                                    <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 
                 <!-- 
@@ -553,25 +606,7 @@
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
-                
-                <!--
-                    maven-antrun-plugin
-                -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
-                </plugin>
-                
-                <!--
-                    maven-help-plugin
-                -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-help-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                
+
                 <!--
                     jalopy-maven: Code formatting plugin
                     Configuration in profile cismet-inhouse-dev!
@@ -810,6 +845,22 @@
             The selection can be extended by the profiles cismet-inhouse-dev, cismet-release and cids-copy-libs -> activeProfiles in settings.xml
         -->
         <plugins>  
+            <!-- 
+                activate the print-active-profiles task configured in pluginManagement
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+            </plugin>
+                    
+            <!-- 
+                activate the print-properties task configured in pluginManagement
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+            
             <!-- Activate Plugin the enforce several dependency rules -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1055,7 +1106,76 @@
             </build>
         </profile>
         
-        
+        <!--
+            dev-exec profile adds cids local libs (e.g. res.jar) to classpath
+            required for running legacy distributions from netbeans.
+            dev-exec profile is deactivated by default in settings.xml, activation in nbactions.xml
+            
+            This profile depends on the following properties (to be configured settings.xml and child pom):
+            
+            -   <de.cismet.cidsDistDir>~/cidsDistribution</de.cismet.cidsDistDir>
+                Path to legacy cidsDistribution, required by cids maven plugin and  
+                maven-dependency-plugin for copying the project artifact to the respective
+                /cidsDistribution/lib directory (int, ext, local), see de.cismet.libDir
+                
+            -   <de.cismet.libDir>lib/int</de.cismet.libDir>
+                libDir defines where the generated artifact is copied and shall be overridden in
+                child poms only
+                
+            -   <de.cismet.cids.navigator.workingDir>${de.cismet.cidsDistDir}/client/cids</de.cismet.cids.navigator.workingDir>
+                path to the navigator workdir in use, used in nbactions.xml to run the navigator from NetBeans 
+                
+            -   <de.cismet.cids.server.workingDir>${de.cismet.cidsDistDir}/server/cids</de.cismet.cids.server.workingDir>
+                path to the server workdir in use, used in nbactions.xml to run the server from NetBeans 
+                
+            -   <de.cismet.cids.lib.local>${de.cismet.cidsDistDir}/lib/localCids</de.cismet.cids.lib.local>  
+                path to the local libs folder in use (e.g. res.jar), required by the cids maven plugin to build ${de.cismet.cids.classpath},
+                used in nbactions.xml to run the client and server from NetBeans  
+             
+        -->
+        <profile>
+            <id>cismet-dev-exec</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- 
+                        activate the print-active-profiles task configured in pluginManagement
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-help-plugin</artifactId>
+                    </plugin>
+                    
+                    <!-- 
+                        activate the print-properties task configured in pluginManagement
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                    </plugin>
+                    
+                    <!--
+                        Among others, generates/replaces the ${de.cismet.cids.classpath} property using the
+                        lib properties specified above.
+                    -->
+                    <plugin>
+                        <groupId>de.cismet.cids</groupId>
+                        <artifactId>cids-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>cids-maven-plugin-create-properties</id>
+                                <goals>
+                                    <goal>create-properties</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <!-- 
             The javafx-java-1.7 build profile can be activated in projects
             that use javafx *and* need to be build on Java 1.7.
