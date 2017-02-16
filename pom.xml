@@ -169,6 +169,7 @@
                                     <echo>[de.cismet.cids.lib.local] ${de.cismet.cids.lib.local}</echo>
                                     <echo>[de.cismet.cids.navigator.workingDir] ${de.cismet.cids.navigator.workingDir}</echo>
                                     <echo>[de.cismet.cids.server.workingDir] ${de.cismet.cids.server.workingDir}</echo>
+                                    <echo>[de.cismet.cids.server.rest.workingDir] ${de.cismet.cids.server.rest.workingDir}</echo>
                                     <echo>[mdep.skip] ${mdep.skip}</echo>
                                     <echo>[mdep.analyze.skip] ${mdep.analyze.skip}</echo>
                                     <echo>[enforcer.skip] ${enforcer.skip}</echo>
@@ -1150,6 +1151,9 @@
             -   <de.cismet.cids.server.workingDir>${de.cismet.cidsDistDir}/server/cids</de.cismet.cids.server.workingDir>
                 path to the server workdir in use, used in nbactions.xml to run the server from NetBeans 
                 
+            -   <de.cismet.cids.server.rest.workingDir>${de.cismet.cidsDistDir}/server/cids_rest</de.cismet.cids.server.rest.workingDir>
+                path to the server rest workdir in use, used in nbactions.xml to run the rest server from NetBeans 
+               
             -   <de.cismet.cids.lib.local>${de.cismet.cidsDistDir}/lib/localCids</de.cismet.cids.lib.local>  
                 path to the local libs folder in use (e.g. res.jar), required by the cids maven plugin to build ${de.cismet.cids.classpath},
                 used in nbactions.xml to run the client and server from NetBeans  
