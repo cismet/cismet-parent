@@ -580,6 +580,7 @@
                                             <ignoreClass>org.aspectj.*</ignoreClass>
                                             <ignoreClass>org.apache.xmlbeans.xml.stream.*</ignoreClass>
                                             <ignoreClass>org.apache.geronimo.osgi.locator.*</ignoreClass>
+                                            <ignoreClass>javax.activation.*</ignoreClass>
                                         </ignoreClasses>
                                         <findAllDuplicates>true</findAllDuplicates>
                                     </banDuplicateClasses>
