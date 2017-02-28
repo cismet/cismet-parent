@@ -667,13 +667,29 @@
                             <sourcepath>${project.basedir}/src/main/java</sourcepath>
                         </compilerArguments>
                     </configuration>
-                    <dependencies>
+                    
+                    <!--
+                        Including the slf4j API and Binding does NOT 
+                        get rid of the following error during compilation:
+                        
+                        SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+                        SLF4J: Defaulting to no-operation (NOP) logger implementation
+                        SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+                    -->
+                    <!--<dependencies>
+                        <dependency>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                            <version>1.7.22</version>
+                            <type>jar</type>
+                        </dependency>
                         <dependency>
                             <groupId>org.slf4j</groupId>
                             <artifactId>slf4j-simple</artifactId>
                             <version>1.7.22</version>
+                            <type>jar</type>
                         </dependency>
-                    </dependencies>
+                    </dependencies>-->
                 </plugin>
                 
                 <!--
