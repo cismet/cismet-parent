@@ -872,6 +872,18 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>1.5.0</version>
+                    <configuration>
+                        <!--
+                            Settings default encoding does not work with nbactions.xml 
+                            -> Append -Dfile.encoding=UTF-8 to <exec.args>
+                        -->
+                        <systemProperties>
+                            <systemProperty>
+                                <key>file.encoding</key>
+                                <value>${project.resources.sourceEncoding}</value>
+                            </systemProperty>
+                        </systemProperties>
+                    </configuration>
                 </plugin>
 
                 <!-- 
