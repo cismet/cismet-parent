@@ -1321,6 +1321,7 @@
                 <maven.test.skip>true</maven.test.skip>
                 <maven.source.skip>true</maven.source.skip>
                 <jarsigner.skip>true</jarsigner.skip>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
             </properties>
         </profile>
         
