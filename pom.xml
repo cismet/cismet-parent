@@ -180,6 +180,7 @@
                                     <echo>[maven.source.skip] ${maven.source.skip}</echo>
                                     <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
                                     <echo>[maven.install.skip] ${maven.install.skip}</echo>
+                                    <echo>[exex.skip] ${exex.skip}</echo>
                                     <echo>[cids.generate-lib.skip] ${cids.generate-lib.skip}</echo>
                                     <echo>================================================================================</echo>  
                                 </target>
@@ -820,6 +821,15 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                
+                <!--
+                    maven-shade-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.0.0</version>
                 </plugin>
 
                 <!--
