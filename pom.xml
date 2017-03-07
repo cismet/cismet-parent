@@ -163,13 +163,15 @@
                                 <goal>run</goal>
                             </goals>
                             <configuration>
-                                <target>
+                                <target>                                
+                                    <echo>================================================================================</echo>
                                     <echo>[de.cismet.cidsDistDir] ${de.cismet.cidsDistDir}</echo>
                                     <echo>[de.cismet.libDir] ${de.cismet.libDir}</echo>
                                     <echo>[de.cismet.cids.lib.local] ${de.cismet.cids.lib.local}</echo>
                                     <echo>[de.cismet.cids.navigator.workingDir] ${de.cismet.cids.navigator.workingDir}</echo>
                                     <echo>[de.cismet.cids.server.workingDir] ${de.cismet.cids.server.workingDir}</echo>
                                     <echo>[de.cismet.cids.server.rest.workingDir] ${de.cismet.cids.server.rest.workingDir}</echo>
+                                    <echo>--------------------------------------------------------------------------------</echo>
                                     <echo>[mdep.skip] ${mdep.skip}</echo>
                                     <echo>[mdep.analyze.skip] ${mdep.analyze.skip}</echo>
                                     <echo>[enforcer.skip] ${enforcer.skip}</echo>
@@ -177,6 +179,9 @@
                                     <echo>[maven.test.skip] ${maven.test.skip}</echo>
                                     <echo>[maven.source.skip] ${maven.source.skip}</echo>
                                     <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
+                                    <echo>[maven.install.skip] ${maven.install.skip}</echo>
+                                    <echo>[cids.generate-lib.skip] ${cids.generate-lib.skip}</echo>
+                                    <echo>================================================================================</echo>  
                                 </target>
                             </configuration>
                         </execution>
