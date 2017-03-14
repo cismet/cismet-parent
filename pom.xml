@@ -587,11 +587,33 @@
                                             <ignoreClass>org.apache.xmlbeans.xml.stream.*</ignoreClass>
                                             <ignoreClass>org.apache.geronimo.osgi.locator.*</ignoreClass>
                                             <ignoreClass>javax.activation.*</ignoreClass>
+                                            
+                                            <!--
+                                                 Found in:
+                                                    org.apache.axis:axis-jaxrpc:jar:1.4:compile
+                                                    xml-apis:xml-apis:jar:1.4.01:compile
+                                            -->
+                                            <ignoreClass>javax.xml.namespace.QName</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    xml-apis:xml-apis:jar:1.4.01:compile
+                                                    jaxen:jaxen:jar:1.1.4:compile
+                                            -->
+                                            <ignoreClass>org.w3c.dom.UserDataHandler</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    de.cismet.custom:cismet-deegree:jar:2.3.8:compile
+                                                    org.deegree:deegree-core-cs:jar:3.2.3:compile
+                                                See https://cismet.slack.com/files/pascal.dihe/F454S3R0B/cids-deegree_v2_3_8_vs_deegree_v3_2_x
+                                            -->
+                                            <ignoreClass>org.deegree.crs.Identifiable</ignoreClass>
                                         </ignoreClasses>
                                         <findAllDuplicates>true</findAllDuplicates>
                                     </banDuplicateClasses>
                                 </rules>
-                                <fail>false</fail>
+                                <fail>true</fail>
                                 <!--<skip>false</skip>-->
                             </configuration>
                         </execution>
