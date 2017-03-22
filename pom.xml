@@ -609,6 +609,16 @@
                                                 See https://cismet.slack.com/files/pascal.dihe/F454S3R0B/cids-deegree_v2_3_8_vs_deegree_v3_2_x
                                             -->
                                             <ignoreClass>org.deegree.crs.Identifiable</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    org.netbeans.api:org-openide-awt:jar:RELEASE701:compile
+                                                    de.cismet.custom:cismet-JUMP:jar:1.5.2:compile
+                                                
+                                                de.cismet.custom:cismet-JUMP is a custom dependency for
+                                                https://sourceforge.net/projects/jump-pilot/
+                                            -->
+                                            <ignoreClass>org.openide.awt.*</ignoreClass>
                                         </ignoreClasses>
                                         <findAllDuplicates>true</findAllDuplicates>
                                     </banDuplicateClasses>
