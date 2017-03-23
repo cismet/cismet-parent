@@ -2,24 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>de.cismet</groupId>
-        <artifactId>global-parent</artifactId>
-        <version>3.0.1</version>
-    </parent>
-
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>3.4-SNAPSHOT</version>
+    <version>5.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
     <description>Parent POM of the cismet GmbH that shall be used for all cismet developement</description>
     <url>http://www.cismet.de</url>
+    
+    <properties>
+        <java.version>1.7</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.version>3.3.9</maven.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    
+    <inceptionYear>2012</inceptionYear>
+    <mailingLists />
+    
     <organization>
         <name>cismet GmbH</name>
         <url>http://www.cismet.de</url>
     </organization>
+    
     <licenses>
         <license>
             <name>GNU Lesser Public License</name>
@@ -27,34 +36,37 @@
             <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
         </license>
     </licenses>
-
+   
     <developers>
         <developer>
-            <id>mscholl</id>
-            <name>Martin Scholl</name>
-            <email>martin.scholl@cismet.de</email>
+            <id>pdihe</id>
+            <name>Pascal Dihé</name>
+            <email>pascal.dihe@cismet.de</email>
             <organization>cismet GmbH</organization>
         </developer>
     </developers>
 
     <prerequisites>
-        <maven>3</maven>
+        <maven>${maven.version}</maven>
     </prerequisites>
 
     <scm>
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
+  
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/cismet/cismet-parent/issues</url>
     </issueManagement>
+    
     <ciManagement>
         <system>jenkins</system>
         <url>https://ci.cismet.de</url>
     </ciManagement>
+    
     <distributionManagement>
         <repository>
             <id>cismet-repo</id>
@@ -84,6 +96,7 @@
             </snapshots>
         </repository>
     </repositories>
+    
     <pluginRepositories>
         <pluginRepository>
             <id>cismet-repo</id>
@@ -100,113 +113,931 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    
+        
     <build>
-        <plugins>
+        <!--
+            plugin configuration
+        -->
+        <pluginManagement>
+            <plugins>
+                
+                <!--
+                    cids-maven-plugin - build tools for cismet projects
+                -->
+                <plugin>
+                    <groupId>de.cismet.cids</groupId>
+                    <artifactId>cids-maven-plugin</artifactId>
+                    <version>5.0-SNAPSHOT</version>
+                </plugin>
+
+                <!--
+                    maven-help-plugin - print the actives profiles for esier debugging
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>2.2</version>
+                    <executions>
+                        <execution>
+                            <id>print-active-profiles</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>active-profiles</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!--
+                    maven-antrun-plugin - print important properties for esier debugging
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                    <executions>
+                        <execution>
+                            <id>print-properties</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>                                
+                                    <echo>================================================================================</echo>
+                                    <echo>[de.cismet.cidsDistDir] ${de.cismet.cidsDistDir}</echo>
+                                    <echo>[de.cismet.libDir] ${de.cismet.libDir}</echo>
+                                    <echo>[de.cismet.cids.lib.local] ${de.cismet.cids.lib.local}</echo>
+                                    <echo>[de.cismet.cids.navigator.workingDir] ${de.cismet.cids.navigator.workingDir}</echo>
+                                    <echo>[de.cismet.cids.server.workingDir] ${de.cismet.cids.server.workingDir}</echo>
+                                    <echo>[de.cismet.cids.server.rest.workingDir] ${de.cismet.cids.server.rest.workingDir}</echo>
+                                    <echo>--------------------------------------------------------------------------------</echo>
+                                    <echo>[mdep.skip] ${mdep.skip}</echo>
+                                    <echo>[mdep.analyze.skip] ${mdep.analyze.skip}</echo>
+                                    <echo>[enforcer.skip] ${enforcer.skip}</echo>
+                                    <echo>[jalopy.skip] ${jalopy.skip}</echo>
+                                    <echo>[maven.test.skip] ${maven.test.skip}</echo>
+                                    <echo>[maven.source.skip] ${maven.source.skip}</echo>
+                                    <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
+                                    <echo>[maven.install.skip] ${maven.install.skip}</echo>
+                                    <echo>[exex.skip] ${exex.skip}</echo>
+                                    <echo>[cids.generate-lib.skip] ${cids.generate-lib.skip}</echo>
+                                    <echo>================================================================================</echo>  
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!-- 
+                    maven-dependency-plugin to enfore declaration of implicit
+                    transitive dependencies
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <!-- 
+                        Note: Executions of the same id from different POMs are merged. 
+                        The same applies to executions that are defined by profiles.
+                    -->
+                    <executions>
+                        <execution>
+                            <id>analyze-dependencies</id>
+                            <goals>
+                                <!--
+                                    binds to the verify phase
+                                -->
+                                <goal>analyze-only</goal>
+                            </goals>
+                            <!-- 
+                                Configurations inside the <executions> tag differ from those that are outside <executions> 
+                                in that they cannot be used from a direct command line invocation. 
+                                Instead they are only applied when the lifecycle phase they are bound to are invoked. 
+                                Alternatively, if you move a configuration section outside of the executions section, 
+                                it will apply globally to all invocations of the plugin.
+                            -->
+                            <configuration>
+                                <!-- 
+                                    make the build fail!
+                                -->
+                                <failOnWarning>true</failOnWarning>
+                            
+                                <!--
+                                    Ignore Runtime/Provided/Test/System scopes for unused dependency analysis.
+                                -->
+                                <ignoreNonCompile>true</ignoreNonCompile>
+                            
+                                <!-- 
+                                    ignore annotations for "unused but declared" warnings 
+                                -->
+                                <ignoredUnusedDeclaredDependencies>
+                                    <!-- 
+                                        run scope only 
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>postgresql:postgresql</ignoredUnusedDeclaredDependency>
+                                    <!-- 
+                                        test scope only 
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>junit:junit</ignoredUnusedDeclaredDependency>
+                                    <!-- 
+                                        jcl-over-slf4j logging bridge is needed to avoid commons-logging compatibility problems 
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.slf4j:jcl-over-slf4j</ignoredUnusedDeclaredDependency>
+                                    <!--
+                                        woodstox ASL vs LGPL mess!
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.codehaus.woodstox:woodstox-core-asl</ignoredUnusedDeclaredDependency>
+                                    <!--
+                                        Need to include managed javassist in favour of javassist mess excluded from degree!
+                                    -->
+                                    <ignoredUnusedDeclaredDependency>org.javassist:javassist</ignoredUnusedDeclaredDependency>
+                                    <!--<ignoredUsedUndeclaredDependencies/>-->
+                                </ignoredUnusedDeclaredDependencies>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!--
+                    Maven enforcer Plugin to enfore various rules during build
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>1.4.1</version>
+                    <executions>
+                        <!-- 
+                            This rule enforces certain Java JDK anbd Aopache Maven versions
+                        -->
+                        <execution>
+                            <id>enforce-java-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <!-- 
+                                        Enforce Minimal supported Java Version (e.g. 1.7) 
+                                    -->
+                                    <requireJavaVersion>
+                                        <version>[${java.version},)</version>
+                                    </requireJavaVersion>
+                                    <!-- 
+                                        Enforce Minimal supported Maven (e.g. 3.3.9) 
+                                    -->
+                                    <requireMavenVersion>
+                                        <version>[${maven.version},)</version>
+                                    </requireMavenVersion>
+                                </rules>
+                                <fail>false</fail>
+                                <!-- 
+                                    default value for skip if not specified is false. Don't set to false
+                                    explicitely, or netbeans-fastbuild profiles won't work!
+                                --> 
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                    
+                        <!--
+                            This rule checks that a specified list of profiles is activated.
+                        --> 
+                        <execution>
+                            <id>enforce-all-profiles-are-activated</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireActiveProfile>
+                                        <profiles>cismet-inhouse-dev</profiles>
+                                    </requireActiveProfile>
+                                </rules>
+                                <fail>false</fail>
+                                <skip>true</skip>
+                            </configuration>
+                        </execution>
+                    
+                        <!-- 
+                            This rule checks files for a required encoding and fails 
+                            if the guessed encoding doesn't match the required one.
+                        -->
+                        <execution>
+                            <id>require-utf-8</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireEncoding>
+                                        <encoding>UTF-8</encoding>
+                                        <includes>src/main/java/**,src/main/resources/**,src/test/java/**,src/test/resources/**</includes>
+                                    </requireEncoding>
+                                </rules>
+                                <useDefaultExcludes>true</useDefaultExcludes>
+                                
+                                <!-- fail=false -> rule temporarily disabled for testing purposes -->
+                                <fail>false</fail>
+                                <fastFail>false</fastFail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                    
+                        <!-- 
+                            This rule checks the dependencies and fails if any 
+                            of the matching excluded test dependencies are found in compile scope.
+                        -->
+                        <execution>
+                            <id>enforce-test-scope</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <bannedDependencies>
+                                        <excludes>
+                                            <exclude>junit:junit:*:*:compile</exclude>
+                                            <exclude>org.mockito:mockito-*:*:*:compile</exclude>
+                                            <exclude>org.easymock:easymock*:*:*:compile</exclude>
+                                            <exclude>org.powermock:powermock-*:*:*:compile</exclude>
+                                            <exclude>org.seleniumhq.selenium:selenium-*:*:*:compile</exclude>
+                                            <exclude>org.springframework:spring-test:*:*:compile</exclude>
+                                            <exclude>org.hamcrest:hamcrest-all:*:*:compile</exclude>
+                                        </excludes>
+                                        <message>Test dependencies should be in test scope!</message>
+                                    </bannedDependencies>
+                                </rules>
+                                <fail>false</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                        <!-- 
+                            This rule checks the dependencies and fails if any 
+                            of the matching excluded conflicting dependencies 
+                            (e.g. XML APIs, logging frameworks, bindings and bridges) are found.
+                        -->
+                        <execution>
+                            <id>sanitize-conflicting-dependencies</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <bannedDependencies>
+                                        <excludes>
+                                            <!-- 
+                                                exclude only slf4j-log4j12 compile-time dependency but still 
+                                                allow slf4j-log4j12 runtime-dependency 
+                                                See https://www.slf4j.org/legacy.html
+                                            -->
+                                            <exclude>org.slf4j:slf4j-log4j12:*:*:compile</exclude>
+                                            <!-- 
+                                                exclude log4j-over-slf4j bridge to avoid infinite loop when 
+                                                slf4j-log4j12 runtime-dependency is available!
+                                            -->
+                                            <exclude>org.slf4j:log4j-over-slf4j:*:*</exclude>
+                                            <!-- 
+                                                exclude runtime-bindings other than slf4j-log4j12
+                                            -->
+                                            <exclude>org.slf4j:slf4j-jdk14:*</exclude>
+                                            <exclude>org.slf4j:slf4j-nop:*:*</exclude>
+                                            <exclude>org.slf4j:slf4j-simple:*:*</exclude>
+                                            <exclude>org.slf4j:slf4j-jcl:*:*</exclude>
+                                            <exclude>org.slf4j:logback-classic:*:*</exclude>
+                                            <!-- 
+                                                exclude commons-logging (must be repaced by jcl-over-slf4j.jar
+                                                find occurences with 'mvn dependency:tree -Dincludes=*commons-logging*'
+                                            -->
+                                            <exclude>commons-logging:commons-logging:*:*</exclude>
+                                            <!--
+                                                Exclude any Xerces compile-time and runtime dependencies!
+                                            -->
+                                            <!--<exclude>*:xerces:*:*:compile</exclude>
+                                            <exclude>*:xml-apis:*:*:compile</exclude>
+                                            <exclude>*:xerces:*:*:runtime</exclude>
+                                            <exclude>*:xml-apis:*:*:runtime</exclude>-->
+                                            <exclude>xerces:xml-apis:*:*:*</exclude>
+                                            <exclude>*:xmlParserAPIs:*:*</exclude>
+                                            <!--
+                                                don't enforce the exclusion of STAX API
+                                                check duplicate classes instead!
+                                            -->
+                                            <!--<exclude>*:stax-api:*:*</exclude>-->
+                                            <!--
+                                                Exclude org.jdom:jdom: To be replaced by
+                                                org.jdom:jdom-legacy!
+                                            -->
+                                            <exclude>org.jdom:jdom:*:*</exclude>
+                                            
+                                            <!--
+                                                Woodstox dependency changed Maven coordinates (org.codehaus.woodstox:wstx-asl changed to org.codehaus.woodstox:woodstox-core-asl).
+                                                See https://github.com/FasterXML/jackson-dataformat-xml/issues/132#issuecomment-69956175
+                                            -->
+                                            <exclude>org.codehaus.woodstox:wstx-asl:*:*</exclude>
+                                            <exclude>org.codehaus.woodstox:wstx-lgpl:*:*</exclude>
+                                            <exclude>org.codehaus.woodstox:woodstox-core-lgpl:*:*</exclude>
+                                            
+                                            <!--
+                                                According maven group id naming convention group names should starts from domain name, 
+                                                so guys who develop javaassist changed group name in 3.13.0 release.
+                                                See https://issues.jboss.org/browse/JASSIST-96?_sscc=t
+                                            -->
+                                            <exclude>javassist:javassist:*:*</exclude>
+                                            
+                                            <!--
+                                                WARNING: org.postgis:postgis-stubs overrides org/postgresql/PGConnection.class of postgresql:postgresql with empty stub
+                                            -->
+                                            <exclude>org.postgis:postgis-stubs:*:*</exclude>
+                                            
+                                            <!--
+                                                Obsolete SwingX Backport to Java 1.5
+                                                See https://en.wikipedia.org/wiki/SwingWorker
+                                            -->
+                                            <exclude>org.jdesktop:swingx:*:*</exclude>
+                                            
+                                            <!--
+                                                FIXME: The correct gropup id is org.jfree, not jfree!
+                                                 Wrong jfreechart dependency in jasper!
+                                            -->
+                                            <!-- <exclude>jfree:*:*:*</exclude> -->
+                                            
+                                            
+                                            <!--
+                                                Java Advanced Imaging Chaos! See 
+                                                https://cismet.slack.com/files/pascal.dihe/F46EX6X7H/Java_Advanced_Imaging___Maven
+                                                http://stackoverflow.com/questions/1209583/using-java-advanced-imaging-with-maven
+                                            -->
+                                            <exclude>de.cismet.todo:jai_codec:*:*</exclude>
+                                            <exclude>de.cismet.todo:jai_core:*:*</exclude>
+                                            <exclude>javax.media:jai-codec:*:*</exclude>
+                                            <exclude>javax.media:jai_codec:*:*</exclude>
+                                            <exclude>javax.media.jai:jai-codec:*:*</exclude>
+                                            <exclude>javax.media.jai:jai_codec:*:*</exclude>
+                                            <exclude>javax.media:jai-core:*:*</exclude>
+                                            <exclude>javax.media:jai_core:*:*</exclude>
+                                            <exclude>javax.media.jai:jai-core:*:*</exclude>
+                                            <exclude>javax.media.jai:jai_core:*:*</exclude>
+                                            <exclude>javax.media:jai_imageio:*:*</exclude>
+                                            <exclude>com.sun.media:jai_imageio:*:*</exclude>
+                                            <exclude>com.sun.media:jai_codec:*:*</exclude>
+                                            
+                                            <!--
+                                                Exclude any forked dependencies!
+                                            -->
+                                            <exclude>org.jdesktop:beansbinding:*:*</exclude>
+                                        </excludes>
+                                        <searchTransitive>true</searchTransitive>
+                                    </bannedDependencies>
+                                </rules>
+                                <fail>true</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                    
+                        <!--
+                            This rule requires that the version for each dependency resolved during a build, 
+                            is equal to or higher than all transitive dependency declarations.
+                        -->
+                        <execution>
+                            <id>require-upper-bound-dependencies</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireUpperBoundDeps>
+                                        <uniqueVersions>true</uniqueVersions>
+                                    </requireUpperBoundDeps>
+                                </rules>
+                                <fail>false</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                        <!--
+                            Requires that dependency version numbers converge.
+                            If a project has two dependencies, A and B, both depending on the same artifact, C,
+                            this rule will fail the build if A depends on a different version of C then the
+                            version of C depended on by B.
+                        -->
+                        <execution>
+                            <id>dependency-convergence</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <dependencyConvergence>
+                                        <uniqueVersions>false</uniqueVersions>
+                                    </dependencyConvergence>
+                                </rules>
+                                <!-- fail=false -> rule temporarily disabled for testing purposes -->
+                                <fail>false</fail>
+                                <skip>true</skip>               
+                            </configuration>            
+                        </execution>
+                    
+                        <!--
+                            Checks the dependencies and fails if the groupId:artifactId combination exists in the
+                            list of direct or transitive dependencies.
+                        -->
+                        <execution>
+                            <id>enforce-ban-circular-dependencies</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <banCircularDependencies />
+                                </rules>
+                                <fail>true</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                        <!--
+                            Checks the dependencies and fails if any class is present in more than one
+                            dependency.
+                        -->
+                        <execution>
+                            <id>enforce-ban-duplicate-classes</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <banDuplicateClasses>
+                                        <ignoreClasses>
+                                            <!--
+                                               Don't just add classes here! add them as a last resort.
+                                               Before doing so try to:
+                                                   * exclude classes by excluding dependencies
+                                                   * update a library (if possible)
+                                                   * look for alternative splitted dependencies
+                                               If you add something make sure the ignored classes are binary
+                                               identical!
+                                            -->
+                                            <ignoreClass>org.apache.juli.*</ignoreClass>
+                                            <ignoreClass>org.apache.commons.*</ignoreClass>
+                                            <ignoreClass>org.aspectj.*</ignoreClass>
+                                            <ignoreClass>org.apache.xmlbeans.xml.stream.*</ignoreClass>
+                                            <ignoreClass>org.apache.geronimo.osgi.locator.*</ignoreClass>
+                                            <ignoreClass>javax.activation.*</ignoreClass>
+                                            
+                                            <!--
+                                                 Found in:
+                                                    org.apache.axis:axis-jaxrpc:jar:1.4:compile
+                                                    xml-apis:xml-apis:jar:1.4.01:compile
+                                            -->
+                                            <ignoreClass>javax.xml.namespace.QName</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    xml-apis:xml-apis:jar:1.4.01:compile
+                                                    jaxen:jaxen:jar:1.1.4:compile
+                                            -->
+                                            <ignoreClass>org.w3c.dom.UserDataHandler</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    de.cismet.custom:cismet-deegree:jar:2.3.8:compile
+                                                    org.deegree:deegree-core-cs:jar:3.2.3:compile
+                                                See https://cismet.slack.com/files/pascal.dihe/F454S3R0B/cids-deegree_v2_3_8_vs_deegree_v3_2_x
+                                            -->
+                                            <ignoreClass>org.deegree.crs.Identifiable</ignoreClass>
+                                            
+                                            <!--
+                                                Found in:
+                                                    org.netbeans.api:org-openide-awt:jar:RELEASE701:compile
+                                                    de.cismet.custom:cismet-JUMP:jar:1.5.2:compile
+                                                
+                                                de.cismet.custom:cismet-JUMP is a custom dependency for
+                                                https://sourceforge.net/projects/jump-pilot/
+                                            -->
+                                            <ignoreClass>org.openide.awt.*</ignoreClass>
+                                        </ignoreClasses>
+                                        <findAllDuplicates>true</findAllDuplicates>
+                                    </banDuplicateClasses>
+                                </rules>
+                                <fail>true</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                        <!--
+                            checks the dependencies transitively and fails if any class of any dependency is having
+                            its bytecode version higher than the one specified.
+                        -->
+                        <execution>
+                            <id>enforce-bytecode-version</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <enforceBytecodeVersion>
+                                        <ignoredScopes>
+                                            <scope>test</scope>
+                                        </ignoredScopes>
+                                        <maxJdkVersion>${java.version}</maxJdkVersion>
+                                    </enforceBytecodeVersion>
+                                </rules>
+                                <fail>false</fail>
+                                <!--<skip>false</skip>-->
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>extra-enforcer-rules</artifactId>
+                            <version>1.0-beta-6</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!--
+                    maven-clean-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <!--
+                    jalopy-maven: Code formatting plugin
+                    Configuration in profile cismet-inhouse-dev!
+                -->
+                <plugin>
+                    <groupId>triemax</groupId>
+                    <artifactId>jalopy-maven</artifactId>
+                    <version>1.9.5-401</version>
+                    <executions>
+                        <execution>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
             
-            <!-- START: direct classpath configuration -->
+                <!--
+                    maven-compiler-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.6.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                        <!-- please add the reason why the default is explicitely specified here -->
+                        <compilerArguments>
+                            <sourcepath>${project.basedir}/src/main/java</sourcepath>
+                        </compilerArguments>
+                    </configuration>
+                    
+                    <!--
+                        Including the slf4j API and Binding does NOT 
+                        get rid of the following error during compilation:
+                        
+                        SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+                        SLF4J: Defaulting to no-operation (NOP) logger implementation
+                        SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+                    -->
+                    <!--<dependencies>
+                        <dependency>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                            <version>1.7.22</version>
+                            <type>jar</type>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-simple</artifactId>
+                            <version>1.7.22</version>
+                            <type>jar</type>
+                        </dependency>
+                    </dependencies>-->
+                </plugin>
+                
+                <!--
+                    maven-surefire-plugin for Testing
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+                    </configuration>
+                </plugin>
+                
+                <!--
+                    maven-resources-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                
+                <!--
+                    maven-jar-plugin
+                    Configuration in child POMs or profiles!
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <!-- 
+                        Overriding configurations from a parent pom can be done by adding the 
+                        combine.self="override" attribute to the element in your pom.
+                    -->
+                    <!--<configuration combine.self="override"/>-->
+                    <configuration>
+                        <archive>
+                            <compress/>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <!--<mainClass>Sirius.navigator.Navigator</mainClass>-->
+                            </manifest>
+                            <manifestEntries>
+                                <Application-Name>${project.name}</Application-Name>                           
+                                <Permissions>all-permissions</Permissions>         
+                                <Codebase>*</Codebase>                   
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                
+                <!--
+                    maven-jarsigner-plugin: Configuration in profile cismet-inhouse-dev and cismet-release!
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jarsigner-plugin</artifactId>
+                    <version>1.4</version>
+                    <!--
+                        By default, plugin configuration should be propagated to child POMs, 
+                        so to break the inheritance, you could set the <inherited> tag to false
+                    -->
+                    <!--<inherited>false</inherited>-->
+                    <executions>
+                        <execution>
+                            <id>sign</id>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!--
+                    maven-source-plugin - attach -src.jar
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                        <!--
+                            attach test sources (DISABLED)
+                        -->
+                        <!--<execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>test-jar-no-fork</goal>
+                            </goals>
+                        </execution>-->  
+                    </executions>
+                </plugin>
+                
+                <!--
+                    maven-javadoc-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <!-- 
+                       Configuration in profile javadoc-java-1.8!
+                    -->
+                    <!--<configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>-->
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <!--
+                    maven-shade-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <!--
+                    maven-install-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+
+                <!--
+                    maven-deploy-plugin - manually deploy artifacts to aretifactory
+                -->
+                <plugin>
+                    <inherited>true</inherited>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+ 
+                    <configuration>
+                        <updateReleaseInfo>true</updateReleaseInfo>
+                    </configuration>
+                </plugin>
+                
+                <!--
+                    maven-site-plugin
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.6</version>
+                    <dependencies>
+                        <dependency><!-- add support for ssh/scp -->
+                            <groupId>org.apache.maven.wagon</groupId>
+                            <artifactId>wagon-ssh</artifactId>
+                            <version>2.10</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                
+                <!--
+                    Maven version Plugins
+                    
+                    Required in nbactions.xml to update the verisons of all modules
+                    to the versions of the parent.
+                -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+                
+                <!--
+                    maven-release-plugin for manual releases
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <!--
+                            Set the Version in multi-module projects automatically
+                            to the version of the parent project.
+                        -->
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
+                
+                <!--
+                    exec-maven-plugin plugin used in conjunction with cids-exec profile and NetBeans nbactions.xml
+                -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.5.0</version>
+                    <configuration>
+                        <!--
+                            Settings default encoding does not work with nbactions.xml 
+                            -> Append -Dfile.encoding=UTF-8 to <exec.args>
+                        -->
+                        <systemProperties>
+                            <systemProperty>
+                                <key>file.encoding</key>
+                                <value>${project.resources.sourceEncoding}</value>
+                            </systemProperty>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+
+                <!-- 
+                    Build plugins will be executed during the build and then, they should be configured in the <build/> element.     
+                -->   
+            </plugins>
+        </pluginManagement>
+        
+        <!-- 
+            This section defines the plugins that are activated during buld lifecycle for all child projects!
+            The selection can be extended by the profiles cismet-inhouse-dev, cismet-release and cids-copy-libs -> activeProfiles in settings.xml
+        -->
+        <plugins>  
+            <!-- 
+                activate the print-active-profiles task configured in pluginManagement
+            -->
             <plugin>
-                <groupId>de.cismet.cids</groupId>
-                <artifactId>cids-maven-plugin</artifactId>
-                <version>2.0.1</version>
-                <executions>
-                    <execution>
-                        <id>create-compile-classpath</id>
-                        <goals>
-                            <goal>create-direct-cp-property</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
             </plugin>
+                    
+            <!-- 
+                activate the print-properties task configured in pluginManagement
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>create-processor-classpath</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <exportAntProperties>true</exportAntProperties>
-                            <target>
-                                <property name="classpath.processorDependencies" refid="maven.compile.classpath" />
-                                <echo>Created processor classpath property: $${classpath.processorDependencies}</echo>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
+            
+            <!-- Activate Plugin the enforce several dependency rules -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!-- version managed by global-parent -->
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>direct-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <compilerArguments>
-                                <sourcepath>${basedir}/src/main/java</sourcepath>
-                                <classpath>${classpath.directDependencies}</classpath>
-                                <processorpath>${classpath.processorDependencies}</processorpath>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
-            <!-- END: direct classpath configuration -->
+            
+            <!-- Activate tests for all child projects -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            
+            <!-- Activate Plugin to enfore declaration of transtive dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
-
+    
+    <!--
+        Reporting plugins will be executed during the site generation and they should be configured in the <reporting/> element.
+    -->
+    <reporting />
+    
     <profiles>
+        <!--
+            cismet inhouse development profile activates code formatting and artifact signing
+            This profile should be activated by default in settings.xml during development!
+            
+            This profile depends on the following properties (to be configured in settings.xml)
+            - de.cismet.keystore.path
+            - de.cismet.keystore.pass
+            - de.cismet.signing.tsa.server
+        -->
         <profile>
-            <id>cismet-dev</id>
+            <id>cismet-inhouse-dev</id>
+            
             <activation>
+                <!-- activate in settings.xml -->
                 <activeByDefault>false</activeByDefault>
             </activation>
+            
+            <!--
+            <properties>
+                <de.cismet.keystore.path></de.cismet.keystore.path>
+                <de.cismet.keystore.pass></de.cismet.keystore.pass>
+                <de.cismet.signing.tsa.server>http://dse200.ncipher.com/TSS/HttpTspServer</de.cismet.signing.tsa.server>
+            </properties>
+            -->
+
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jarsigner-plugin</artifactId>
-                        <version>1.4</version>
-                        <executions>
-                            <execution>
-                                <id>sign</id>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <keystore>${de.cismet.keystore.path}</keystore>
-                            <alias>cismet</alias>
-                            <storepass>${de.cismet.keystore.pass}</storepass>
-			    <tsa>${de.cismet.signing.tsa.server}</tsa>
-                        </configuration>
-                    </plugin>
+                    <!--
+                        jalopy code formatting plugin
+                    -->
                     <plugin>
                         <groupId>triemax</groupId>
                         <artifactId>jalopy-maven</artifactId>
-                        <version>1.9.5-401</version>
-                        <executions>
-                            <execution>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>format</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                         <configuration>
                             <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
                             <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
@@ -215,8 +1046,371 @@
                             <compile>true</compile>
                         </configuration>
                     </plugin>
+       
+                    <!--
+                        sign artifacts with cismet key
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <configuration>
+                            <keystore>${de.cismet.keystore.path}</keystore>
+                            <alias>cismet</alias>
+                            <storepass>${de.cismet.keystore.pass}</storepass>
+                            <tsa>${de.cismet.signing.tsa.server}</tsa>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
+        </profile>
+        
+        <!-- 
+            cismet-legacy-dev uses the cids-maven-plugin to enfore declaration of
+            implicit transitive dependencies *during compilation*. The profile is deactivated
+            by default for all builds! It can be activated temporarily to track down
+            dependency problems raised by the maven-dependency plugin (which is executed 
+            *after compilation*).
+        -->
+        <profile>
+            <id>cismet-legacy-dev</id>
+            
+            <activation>
+                <!-- activate temporarily in NetBeans for current project -->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+                        
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!-- START: direct classpath configuration -->
+                        <plugin>
+                            <groupId>de.cismet.cids</groupId>
+                            <artifactId>cids-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-compile-classpath</id>
+                                    <goals>
+                                        <goal>create-direct-cp-property</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-antrun-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-processor-classpath</id>
+                                    <phase>initialize</phase>
+                                    <goals>
+                                        <goal>run</goal>
+                                    </goals>
+                                    <configuration>
+                                        <exportAntProperties>true</exportAntProperties>
+                                        <target>
+                                            <property name="classpath.processorDependencies" refid="maven.compile.classpath" />
+                                            <echo>>>>>>>>>>>>>> Created processor classpath property: ${line.separator}${classpath.processorDependencies}${line.separator}</echo>
+                                            <echo>>>>>>>>>>>>>> Created direct dependencies classpath property: ${line.separator}${classpath.directDependencies}${line.separator}</echo>
+                                        </target>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <!-- version managed by global-parent -->
+                            <executions>
+                                <execution>
+                                    <id>default-compile</id>
+                                    <phase>none</phase>
+                                </execution>
+                                <execution>
+                                    <id>direct-compile</id>
+                                    <phase>compile</phase>
+                                    <goals>
+                                        <goal>compile</goal>
+                                    </goals>
+                                    <configuration>
+                                        <compilerArguments>
+                                            <sourcepath>${basedir}/src/main/java</sourcepath>
+                                            <classpath>${classpath.directDependencies}</classpath>
+                                            <processorpath>${classpath.processorDependencies}</processorpath>
+                                        </compilerArguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <!-- END: direct classpath configuration -->
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>de.cismet.cids</groupId>
+                        <artifactId>cids-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!--
+            cismet release profile activates plugins artifact signing and creation of -src and -javadoc.jar
+            in addition to default plugins activated in cismet-parent
+            This profile should NOT be activated by default in settings.xml during development!
+            
+            This profile depends on the following properties (to be configured in settings.xml)
+            - de.cismet.keystore.path
+            - de.cismet.keystore.pass
+            - de.cismet.signing.tsa.server
+        -->
+        <profile>
+            <id>cismet-release</id>
+            
+            <activation>
+                <!-- activate in settings.xml of jenkins-->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            
+            <properties>
+                <jalopy.skip>true</jalopy.skip>
+            </properties>
+
+            <build>
+                <plugins>    
+                    <!--
+                        create test-jar for use in upstream projects
+                    --> 
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>test-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--
+                        sign artifacts with cismet key
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <configuration>
+                            <keystore>${de.cismet.keystore.path}</keystore>
+                            <alias>cismet</alias>
+                            <storepass>${de.cismet.keystore.pass}</storepass>
+                            <tsa>${de.cismet.signing.tsa.server}</tsa>
+                        </configuration>
+                    </plugin>
+                    
+                    <!-- attach sources -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <!-- generate and attach javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!--
+            dev-exec profile adds cids local libs (e.g. res.jar) to classpath
+            required for running legacy distributions from netbeans.
+            dev-exec profile is deactivated by default in settings.xml, activation in nbactions.xml
+            
+            This profile depends on the following properties (to be configured settings.xml and child pom):
+            
+            -   <de.cismet.cidsDistDir>~/cidsDistribution</de.cismet.cidsDistDir>
+                Path to legacy cidsDistribution, required by cids maven plugin and  
+                maven-dependency-plugin for copying the project artifact to the respective
+                /cidsDistribution/lib directory (int, ext, local), see de.cismet.libDir
+                
+            -   <de.cismet.libDir>lib/int</de.cismet.libDir>
+                libDir defines where the generated artifact is copied and shall be overridden in
+                child poms only
+                
+            -   <de.cismet.cids.navigator.workingDir>${de.cismet.cidsDistDir}/client/cids</de.cismet.cids.navigator.workingDir>
+                path to the navigator workdir in use, used in nbactions.xml to run the navigator from NetBeans 
+                
+            -   <de.cismet.cids.server.workingDir>${de.cismet.cidsDistDir}/server/cids</de.cismet.cids.server.workingDir>
+                path to the server workdir in use, used in nbactions.xml to run the server from NetBeans 
+                
+            -   <de.cismet.cids.server.rest.workingDir>${de.cismet.cidsDistDir}/server/cids_rest</de.cismet.cids.server.rest.workingDir>
+                path to the server rest workdir in use, used in nbactions.xml to run the rest server from NetBeans 
+               
+            -   <de.cismet.cids.lib.local>${de.cismet.cidsDistDir}/lib/localCids</de.cismet.cids.lib.local>  
+                path to the local libs folder in use (e.g. res.jar), required by the cids maven plugin to build ${de.cismet.cids.classpath},
+                used in nbactions.xml to run the client and server from NetBeans  
+             
+        -->
+        <profile>
+            <id>cismet-dev-exec</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- 
+                        activate the print-active-profiles task configured in pluginManagement
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-help-plugin</artifactId>
+                    </plugin>
+                    
+                    <!-- 
+                        activate the print-properties task configured in pluginManagement
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                    </plugin>
+                    
+                    <!--
+                        Among others, generates/replaces the ${de.cismet.cids.classpath} property using the
+                        lib properties specified above.
+                    -->
+                    <plugin>
+                        <groupId>de.cismet.cids</groupId>
+                        <artifactId>cids-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>cids-maven-plugin-create-properties</id>
+                                <goals>
+                                    <goal>create-properties</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- 
+            The javafx-java-1.7 build profile can be activated in projects
+            that use javafx *and* need to be build on Java 1.7.
+            The location of jfxrt.jar in Oracle Java 7 <JRE_HOME>/lib/jfxrt.jar
+            The location of jfxrt.jar in Oracle Java 8 is <JRE_HOME>/lib/ext/jfxrt.jar
+            - extend the profile in pom of respective projects that uses javafx
+            - set activiation property <jdk>(,1.7]</jdk>
+        -->
+        <profile>
+            <id>javafx-java-1.7</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <!--<jdk>(,1.7]</jdk>-->
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>jfxrt</artifactId>
+                        <version>${java.version}</version>
+                        <scope>system</scope>
+                        <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement> 
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <!--
+            Profile to automatically configure the maven-javadoc-plugin for
+            Java 1.8 and 1.7 compatibility
+        -->                
+        <profile>
+            <id>javadoc-java-1.8</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <build>
+                <!--
+                    Configure in pluginManagement Section only: Don't activate the 
+                    plugin during the build by default!
+                -->
+                <pluginManagement>
+                    <plugins>
+                        <!--
+                            maven-javadoc-plugin
+                        -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <!-- 
+                                required for Java 1.8 (disabled for Java 1.7)
+                            -->
+                            <configuration>
+                                <additionalparam>-Xdoclint:none</additionalparam>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+                
+        <!--
+            netbeans-fastbuild is a profile that can be activated in nbactions.xml for 
+            certain build actions (e.g. build, run) to speed up the build process
+            during development. It skips all tasks related to dependecy management 
+            code formatting and testing.
+            
+            NOTE: this profile *must not* be activated for the 'clean and build' action!
+            'clean and build' *must* be executed before comitting changes to the SCM!
+        -->
+        <profile>
+            <id>netbeans-fastbuild</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <mdep.skip>true</mdep.skip>
+                <mdep.analyze.skip>true</mdep.analyze.skip>
+                <enforcer.skip>true</enforcer.skip>
+                <jalopy.skip>true</jalopy.skip>
+                <maven.test.skip>true</maven.test.skip>
+                <maven.source.skip>true</maven.source.skip>
+                <jarsigner.skip>true</jarsigner.skip>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
+            </properties>
+        </profile>
+        
+        <!--
+            netbeans-fastbuild-test is a profile that can be activated in nbactions.xml for 
+            certain test build actions (e.g. test, debug-test, ...) to speed up the build process
+            during testing. It skips all tasks related to dependecy management and code formatting.
+            
+            NOTE: this profile *must not* be activated for the 'clean and build' action!
+            'clean and build' *must* be executed before comitting changes to the SCM!
+        -->
+        <profile>
+            <id>netbeans-fastbuild-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <mdep.analyze.skip>true</mdep.analyze.skip>
+                <enforcer.skip>true</enforcer.skip>
+                <jalopy.skip>true</jalopy.skip>
+                <maven.source.skip>true</maven.source.skip>
+                <jarsigner.skip>true</jarsigner.skip>
+            </properties>
         </profile>
     </profiles>
 </project>
