@@ -4,7 +4,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>5.0-SNAPSHOT</version>
+    <version>5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -127,7 +127,7 @@
                 <plugin>
                     <groupId>de.cismet.cids</groupId>
                     <artifactId>cids-maven-plugin</artifactId>
-                    <version>5.0-SNAPSHOT</version>
+                    <version>5.0</version>
                 </plugin>
 
                 <!--
@@ -252,7 +252,7 @@
                                         Need to include managed javassist in favour of javassist mess excluded from degree!
                                     -->
                                     <ignoredUnusedDeclaredDependency>org.javassist:javassist</ignoredUnusedDeclaredDependency>
-                                    <!--<ignoredUsedUndeclaredDependencies/>-->
+                                    <!--<ignoredUsedUndeclaredDependencies />-->
                                 </ignoredUnusedDeclaredDependencies>
                             </configuration>
                         </execution>
@@ -773,10 +773,10 @@
                         Overriding configurations from a parent pom can be done by adding the 
                         combine.self="override" attribute to the element in your pom.
                     -->
-                    <!--<configuration combine.self="override"/>-->
+                    <!--<configuration combine.self="override" />-->
                     <configuration>
                         <archive>
-                            <compress/>
+                            <compress />
                             <manifest>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
@@ -960,7 +960,7 @@
                 </plugin>
 
                 <!-- 
-                    Build plugins will be executed during the build and then, they should be configured in the <build/> element.     
+                    Build plugins will be executed during the build and then, they should be configured in the <build /> element.     
                 -->   
             </plugins>
         </pluginManagement>
@@ -1007,7 +1007,7 @@
     </build>
     
     <!--
-        Reporting plugins will be executed during the site generation and they should be configured in the <reporting/> element.
+        Reporting plugins will be executed during the site generation and they should be configured in the <reporting /> element.
     -->
     <reporting />
     
@@ -1116,8 +1116,8 @@
                                         <exportAntProperties>true</exportAntProperties>
                                         <target>
                                             <property name="classpath.processorDependencies" refid="maven.compile.classpath" />
-                                            <echo>>>>>>>>>>>>>> Created processor classpath property: ${line.separator}${classpath.processorDependencies}${line.separator}</echo>
-                                            <echo>>>>>>>>>>>>>> Created direct dependencies classpath property: ${line.separator}${classpath.directDependencies}${line.separator}</echo>
+                                            <echo>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Created processor classpath property: ${line.separator}${classpath.processorDependencies}${line.separator}</echo>
+                                            <echo>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Created direct dependencies classpath property: ${line.separator}${classpath.directDependencies}${line.separator}</echo>
                                         </target>
                                     </configuration>
                                 </execution>
