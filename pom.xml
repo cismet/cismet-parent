@@ -739,6 +739,13 @@
                     <version>2.19.1</version>
                     <configuration>
                         <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+                        <!--
+                            FIXME: Execute Tests Headless since ci server (jenkins)
+                            is missing X11!
+                        -->
+                        <systemPropertyVariables>
+                            <java.awt.headless>true</java.awt.headless>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
                 
