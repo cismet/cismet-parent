@@ -127,7 +127,7 @@
                 <plugin>
                     <groupId>de.cismet.cids</groupId>
                     <artifactId>cids-maven-plugin</artifactId>
-                    <version>5.0</version>
+                    <version>5.0.1</version>
                 </plugin>
 
                 <!--
