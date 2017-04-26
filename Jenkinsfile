@@ -10,7 +10,9 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                checkout scm
+                checkout([$class: 'GitSCM', branches: [[name: '*/dev']], 
+                        extensions: [[$class: 'CleanCheckout'], 
+                            [$class: 'LocalBranch', localBranch: 'dev']]])
             }
         }  
         
