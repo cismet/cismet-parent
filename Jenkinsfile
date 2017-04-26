@@ -46,14 +46,14 @@ pipeline {
 				to: "pascal@cismet.de", 
 				subject: "Jenkins build became unstable: ${currentBuild.fullDisplayName}",
                 body: """<p>UNSTABLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-                Check console output at '${env.BUILD_URL}'""")
+				Check console output at '${env.BUILD_URL}'""")
         }
         changed {
             mail(from: "jenkins@boxy.cismet.de", 
                 to: "dev@cismet.de", 
-                subject: "${currentBuild.fullDisplayName} passed.",
+                subject: "Jenkins build passed: ${currentBuild.fullDisplayName}",
                 body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-                Check console output at '${env.BUILD_URL}'""")
+				Check console output at '${env.BUILD_URL}'""")
         }
     }
 }
