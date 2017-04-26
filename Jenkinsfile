@@ -10,7 +10,9 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                checkout scm
+                checkout([$class: 'GitSCM', branches: [[name: '*/dev']], 
+                        extensions: [[$class: 'CleanCheckout'], 
+                            [$class: 'LocalBranch', localBranch: 'dev']]])
             }
         }  
         
@@ -35,25 +37,25 @@ pipeline {
 			sh '$JENKINS_HOME/scripts/updateGithubIssue.sh'
         }
         failure {
-            mail(from: "jenkins@boxy.cismet.de", 
+            emailext attachLog: true, 
 				to: "pascal@cismet.de", 
 				subject: "Build failed in Jenkins: ${currentBuild.fullDisplayName}",
-                body: """FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-                Check console output at '${env.BUILD_URL}'""")
+                body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
         }
         unstable {
-            mail(from: "jenkins@boxy.cismet.de", 
+            emailext attachLog: true, 
 				to: "pascal@cismet.de", 
 				subject: "Jenkins build became unstable: ${currentBuild.fullDisplayName}",
-                body: """<p>UNSTABLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-				Check console output at '${env.BUILD_URL}'""")
+                body: """<p>UNSTABLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
         }
         changed {
-            mail(from: "jenkins@boxy.cismet.de", 
+            emailext attachLog: true, 
                 to: "dev@cismet.de", 
                 subject: "Jenkins build passed: ${currentBuild.fullDisplayName}",
-                body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-				Check console output at '${env.BUILD_URL}'""")
+                body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
         }
     }
 }
