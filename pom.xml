@@ -4,18 +4,18 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>5.0.1</version>
+    <version>5.1.1</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
-    <description>Parent POM of the cismet GmbH that shall be used for all cismet developement</description>
+    <description>Parent POM of the cismet GmbH that shall be used for all cismet developments</description>
     <url>http://www.cismet.de</url>
     
     <properties>
         <java.version>1.7</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.version>3.3.9</maven.version>
+        <maven.version>3.5.0</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -46,15 +46,11 @@
         </developer>
     </developers>
 
-    <prerequisites>
-        <maven>${maven.version}</maven>
-    </prerequisites>
-
     <scm>
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-        <tag>v5.0.1</tag>
+        <tag>v5.1.1</tag>
     </scm>
   
     <issueManagement>
@@ -101,6 +97,21 @@
         <pluginRepository>
             <id>cismet-repo</id>
             <url>https://repo.cismet.de/repo</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>interval:60</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>cismet-private-repo</id>
+            <name>plugins-releases-local</name>
+            <url>https://repo.cismet.de/plugins-releases-local</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>
@@ -180,7 +191,7 @@
                                     <echo>[maven.source.skip] ${maven.source.skip}</echo>
                                     <echo>[jarsigner.skip] ${jarsigner.skip}</echo>
                                     <echo>[maven.install.skip] ${maven.install.skip}</echo>
-                                    <echo>[exex.skip] ${exex.skip}</echo>
+                                    <echo>[exec.skip] ${exec.skip}</echo>
                                     <echo>[cids.generate-lib.skip] ${cids.generate-lib.skip}</echo>
                                     <echo>================================================================================</echo>  
                                 </target>
@@ -736,7 +747,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>2.20</version>
                     <configuration>
                         <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
                         <!--
@@ -905,7 +916,7 @@
                         <dependency><!-- add support for ssh/scp -->
                             <groupId>org.apache.maven.wagon</groupId>
                             <artifactId>wagon-ssh</artifactId>
-                            <version>2.10</version>
+                            <version>2.12</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -944,7 +955,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.5.0</version>
+                    <version>1.6.0</version>
                     <configuration>
                         <!--
                             Settings default encoding does not work with nbactions.xml 
