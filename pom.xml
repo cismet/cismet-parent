@@ -4,7 +4,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>5.1.1</version>
+    <version>5.1.2</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -50,7 +50,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-        <tag>v5.1.1</tag>
+        <tag>v5.1.2</tag>
     </scm>
   
     <issueManagement>
@@ -108,21 +108,6 @@
                 <updatePolicy>interval:60</updatePolicy>
             </snapshots>
         </pluginRepository>
-        <pluginRepository>
-            <id>cismet-private-repo</id>
-            <name>plugins-releases-local</name>
-            <url>https://repo.cismet.de/plugins-releases-local</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>daily</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>interval:60</updatePolicy>
-            </snapshots>
-        </pluginRepository>
     </pluginRepositories>
         
     <build>
@@ -138,7 +123,7 @@
                 <plugin>
                     <groupId>de.cismet.cids</groupId>
                     <artifactId>cids-maven-plugin</artifactId>
-                    <version>5.0.1</version>
+                    <version>5.1</version>
                 </plugin>
 
                 <!--
@@ -207,7 +192,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.0.1</version>
                     <!-- 
                         Note: Executions of the same id from different POMs are merged. 
                         The same applies to executions that are defined by profiles.
