@@ -108,21 +108,6 @@
                 <updatePolicy>interval:60</updatePolicy>
             </snapshots>
         </pluginRepository>
-        <pluginRepository>
-            <id>cismet-private-repo</id>
-            <name>plugins-releases-local</name>
-            <url>https://repo.cismet.de/plugins-releases-local</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>daily</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>interval:60</updatePolicy>
-            </snapshots>
-        </pluginRepository>
     </pluginRepositories>
         
     <build>
@@ -207,7 +192,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.0.1</version>
                     <!-- 
                         Note: Executions of the same id from different POMs are merged. 
                         The same applies to executions that are defined by profiles.
