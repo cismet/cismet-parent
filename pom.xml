@@ -408,6 +408,9 @@
                                                 find occurences with 'mvn dependency:tree -Dincludes=*commons-logging*'
                                             -->
                                             <exclude>commons-logging:commons-logging:*:*</exclude>
+                                            
+                                            <!-- exclude log4j version 1 -->
+                                            <exclude>log4j:log4j:*:*</exclude>
                                             <!--
                                                 Exclude any Xerces compile-time and runtime dependencies!
                                             -->
