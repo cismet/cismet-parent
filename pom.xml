@@ -4,7 +4,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>8.0</version>
+    <version>9.0</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -50,7 +50,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-        <tag>v8.0</tag>
+        <tag>v9.0</tag>
     </scm>
   
     <issueManagement>
@@ -408,6 +408,9 @@
                                                 find occurences with 'mvn dependency:tree -Dincludes=*commons-logging*'
                                             -->
                                             <exclude>commons-logging:commons-logging:*:*</exclude>
+                                            
+                                            <!-- exclude log4j version 1 -->
+                                            <exclude>log4j:log4j:*:*</exclude>
                                             <!--
                                                 Exclude any Xerces compile-time and runtime dependencies!
                                             -->
