@@ -4,7 +4,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>8.1-SNAPSHOT</version>
+    <version>9.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
