@@ -4,7 +4,7 @@
 
     <groupId>de.cismet</groupId>
     <artifactId>cismet-parent</artifactId>
-    <version>9.0</version>
+    <version>10.0</version>
     <packaging>pom</packaging>
 
     <name>cismet parent POM</name>
@@ -12,13 +12,15 @@
     <url>http://www.cismet.de</url>
     
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.version>3.5.0</maven.version>
+        <maven.version>3.9.6</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <plugin.prettier.goal>write</plugin.prettier.goal>
+        <netbeans.version>RELEASE701</netbeans.version>
     </properties>
     
     <inceptionYear>2012</inceptionYear>
@@ -50,7 +52,7 @@
         <connection>https://github.com/cismet/cismet-parent.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-parent.git</developerConnection>
         <url>https://github.com/cismet/cismet-parent</url>
-        <tag>v9.0</tag>
+        <tag>v10.0</tag>
     </scm>
   
     <issueManagement>
@@ -109,6 +111,15 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>de.cismet.lookup.preprocessor</groupId>
+            <artifactId>cismet-lookup-preprocessor</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
         
     <build>
         <!--
@@ -192,7 +203,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.6.0</version>
                     <!-- 
                         Note: Executions of the same id from different POMs are merged. 
                         The same applies to executions that are defined by profiles.
@@ -261,7 +272,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.4.1</version>
+                    <version>3.5.0</version>
                     <executions>
                         <!-- 
                             This rule enforces certain Java JDK anbd Aopache Maven versions
@@ -656,7 +667,7 @@
                         <dependency>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>extra-enforcer-rules</artifactId>
-                            <version>1.0-beta-6</version>
+                            <version>1.8.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -674,7 +685,7 @@
                     jalopy-maven: Code formatting plugin
                     Configuration in profile cismet-inhouse-dev!
                 -->
-                <plugin>
+<!--                <plugin>
                     <groupId>triemax</groupId>
                     <artifactId>jalopy-maven</artifactId>
                     <version>1.9.5-401</version>
@@ -686,7 +697,7 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
+                </plugin>-->
 
             
                 <!--
@@ -695,12 +706,25 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                        <annotationProcessorPaths>
+                            <!-- Include any annotation processors here -->
+                            <path>
+                                <groupId>de.cismet.lookup.preprocessor</groupId>
+                                <artifactId>cismet-lookup-preprocessor</artifactId>
+                                <version>1.0</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.30</version>
+                            </path>
+                        </annotationProcessorPaths>
                         <!-- please add the reason why the default is explicitely specified here -->
                         <compilerArguments>
                             <sourcepath>${project.basedir}/src/main/java</sourcepath>
@@ -737,7 +761,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.20</version>
+                    <version>3.2.5</version>
                     <configuration>
                         <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
                         <!--
@@ -747,6 +771,10 @@
                         <systemPropertyVariables>
                             <java.awt.headless>true</java.awt.headless>
                         </systemPropertyVariables>
+                        <additionalClasspathElements>
+                            <additionalClasspathElement>${project.build.testOutputDirectory}</additionalClasspathElement>
+                            <additionalClasspathElement>${project.build.outputDirectory}</additionalClasspathElement>
+                        </additionalClasspathElements>
                     </configuration>
                 </plugin>
                 
@@ -1041,18 +1069,35 @@
             <build>
                 <plugins>
                     <!--
-                        jalopy code formatting plugin
+                        prettier code formatting plugin
                     -->
                     <plugin>
-                        <groupId>triemax</groupId>
-                        <artifactId>jalopy-maven</artifactId>
-                        <configuration>
-                            <convention>https://raw.github.com/cismet/cismet-parent/dev/src/main/resources/jalopy/cismet_jalopy.xml</convention>
-                            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-                            <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                            <repository>false</repository>
-                            <compile>true</compile>
-                        </configuration>
+                      <groupId>com.hubspot.maven.plugins</groupId>
+                      <artifactId>prettier-maven-plugin</artifactId>
+                      <version>0.22</version>
+                      <configuration>
+                            <skip>${prettier.skip}</skip>
+                            <prettierJavaVersion>2.0.0</prettierJavaVersion>
+                            <printWidth>120</printWidth>
+                            <tabWidth>4</tabWidth>
+                            <useTabs>false</useTabs>
+                            <ignoreConfigFile>true</ignoreConfigFile>
+                            <ignoreEditorConfig>true</ignoreEditorConfig>
+                            <!-- Use <inputGlobs> to override the default input patterns -->
+                            <inputGlobs>
+                              <!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
+                              <inputGlob>src/main/java/**/*.java</inputGlob>
+                              <inputGlob>src/test/java/**/*.java</inputGlob>
+                            </inputGlobs>
+                      </configuration>
+                      <executions>
+                        <execution>
+                          <phase>validate</phase>
+                          <goals>
+                            <goal>${plugin.prettier.goal}</goal>
+                          </goals>
+                        </execution>
+                      </executions>
                     </plugin>
        
                     <!--
@@ -1185,6 +1230,7 @@
             
             <properties>
                 <jalopy.skip>true</jalopy.skip>
+                <prettier.skip>true</prettier.skip>
             </properties>
 
             <build>
