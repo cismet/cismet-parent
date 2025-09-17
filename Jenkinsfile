@@ -18,7 +18,7 @@ pipeline {
             steps {
                 withMaven(
                     maven: 'default', // Tools declared in the Jenkins "Global Tool Configuration"
-                    jdk: 'default'){
+                    jdk: 'zulu-11.0.28'){
                     sh 'mvn -U clean deploy'
                 } // withMaven will discover the generated Maven artifacts, JUnit reports and FindBugs reports
             }
